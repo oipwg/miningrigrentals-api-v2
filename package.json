@@ -1,0 +1,30 @@
+{
+  "name": "miningrigrentals-api-v2",
+  "version": "1.0.0",
+  "description": "Node JS Module interface with the Mining Rig Rentals API V2 easily",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepare": "npm run compile",
+    "compile": "npx babel src --out-dir lib",
+    "test": "jest"
+  },
+  "author": "Ryan Chacon, Sky Ostler",
+  "keywords": [
+    "Mining",
+    "Rig",
+    "Rentals",
+    "miningrigrentals",
+    "bitcoin",
+    "API"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.1",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "jest": "^23.6.0",
+    "jsdoc": "^3.5.5"
+  },
+  "dependencies": {}
+}
