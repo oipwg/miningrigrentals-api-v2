@@ -53,12 +53,17 @@ class MiningRigRentals {
 
 	/**
 	 * Get all algos and statistics for them (suggested price, unit information, current rented hash/etc)
-	 * @param {string} [currency='BTC'] - Currency to use for price info
-	 * @returns {Promise<*>}
+	 * @param {string} [currency='BTC'] - Currency to use for price info *Ticker. Options: BTC, ETH, LTC, DASH
+	 * @returns {Promise<Object>}
 	 */
 	async getAlgos(currency) {
-		let endpoint = '/info/algos';
-		let api = this.initAPI(endpoint);
+		let endpoint = `/info/algos`, params;
+		if (currency) {
+			params = {
+				currency: currency
+			}
+		}
+		let api = this.initAPI(endpoint, params);
 		try {
 			return (await api.get(endpoint)).data;
 		} catch (err) {
@@ -67,13 +72,18 @@ class MiningRigRentals {
 	};
 	/**
 	 *
-	 * @param {string} algo - the name of the algorithm you wish to search by. Ex: 'SCRYPT'
-	 * @param {string} [currency='BTC'] - Currency to use for price info
+	 * @param {string} algo - the name of the algorithm you wish to search by. Ex: 'scrypt'
+	 * @param {string} [currency='BTC'] - Currency to use for price info. Options: BTC, ETH, LTC, DASH
 	 * @returns {Promise<*>}
 	 */
 	async getAlgo(algo, currency) {
-		let endpoint = `/info/algos/${algo}`;
-		let api = this.initAPI(endpoint);
+		let endpoint = `/info/algos/${algo}`, params;
+		if (currency) {
+			params = {
+				currency: currency
+			}
+		}
+		let api = this.initAPI(endpoint, params);
 		try {
 			return (await api.get(endpoint)).data;
 		} catch (err) {
@@ -83,11 +93,11 @@ class MiningRigRentals {
 	/**
 	 * Initialize a new instance of axios with desired endpoint
 	 * @param {string} endpoint - the endpoint you wish to hit WITHOUT THE TRAILING SLASH; ex: /rig/14
-	 * @param {Object} [args] - the data to be passed along to the API
+	 * @param {Object} [params] - extra parameters to be passed along to the API
 	 * @param {string} [version='v2'] - specify the mining rig rental api version you want to hit; defaults v2
 	 * @returns {AxiosInstance}
 	 */
-	initAPI(endpoint, args, version = v2) {
+	initAPI(endpoint, params, version = v2) {
 		let nonce = this.generateNonce();
 		let hmac_digest = this.createHMACSignature(endpoint, nonce);
 		return (
@@ -99,6 +109,7 @@ class MiningRigRentals {
 					'x-api-nonce': nonce,
 					'Access-Control-Allow-Origin': '*',
 				},
+				params: params
 			})
 		)
 	};

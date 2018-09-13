@@ -7,6 +7,7 @@ const apiSettings = {
 const testEndpoint = '/rig/14';
 
 describe('MiningRigRentals', () => {
+	/* ---------------- AXIOS ---------------- */
 	describe('Create an API axios instance', () => {
 		it('should generate a nonce that increases with each call', () => {
 			let mrr = new MiningRigRentals(apiSettings);
@@ -28,6 +29,7 @@ describe('MiningRigRentals', () => {
 			//@ToDO: test x-api-sign
 		});
 	});
+	/* ------------ Information API ----------- */
 	describe('Information API', () => {
 		it('should make a GET call to /whoami', async () => {
 			let mrr = new MiningRigRentals(apiSettings), thrown = false;
@@ -53,13 +55,25 @@ describe('MiningRigRentals', () => {
 			let mrr = new MiningRigRentals(apiSettings), thrown = false;
 			try {
 				let res = await mrr.getAlgos();
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
 				expect(thrown).toBeTruthy()
 			}
 		});
+		it('GET call to /info/algos with specified currency', async () => {
+			let mrr = new MiningRigRentals(apiSettings)
+			let thrown = false, currency = 'EOS';
+			try {
+				let res = await mrr.getAlgos(currency);
+				for (let x of res.data) {
+					expect(x.suggested_price.currency).toEqual(currency)
+				}
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		}, 10000);
 		it('should make a GET call to /info/algo/[NAME]', async () => {
 			let mrr = new MiningRigRentals(apiSettings), thrown = false;
 			try {
@@ -70,7 +84,20 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
+		it('make a GET call to /info/algo/[NAME] with specified currency', async () => {
+			let mrr = new MiningRigRentals(apiSettings)
+			let thrown = false, currency = 'DASH';
+			try {
+				let res = await mrr.getAlgo("scrypt", currency);
+				console.log(res.data)
+				expect(res.data.suggested_price.currency).toEqual(currency)
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
 	});
+	/* ------------ Account API ----------- */
 	describe('Account API', () => {
 		// it('should make a get call to /account', async () => {
 		// 	let mrr = new MiningRigRentals(apiSettings);
@@ -78,12 +105,14 @@ describe('MiningRigRentals', () => {
 		// 	expect(success).toBeFalsy()
 		// });
 	});
+	/* ------------ Rig API ----------- */
 	describe('Rig API', () => {
 		// it('should make a get call to /rig', async () => {
 		// 	let mrr = new MiningRigRentals(apiSettings);
 		// 	console.log(await mrr.getRig())
 		// })
 	});
+	/* ------------ Rental API ----------- */
 	describe('Rental API', () => {
 		// it('should make a get call to /rental', async () => {
 		// 	let mrr = new MiningRigRentals(apiSettings);
