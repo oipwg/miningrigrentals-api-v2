@@ -70,7 +70,7 @@ class MiningRigRentals {
 		}
 	};
 	/**
-	 *
+	 * Get statistics for an algo (suggested price, unit information, current rented hash/etc)
 	 * @param {string} algo - the name of the algorithm you wish to search by. Ex: 'scrypt'
 	 * @param {string} [currency='BTC'] - Currency to use for price info. Options: BTC, ETH, LTC, DASH
 	 * @returns {Promise<*>}
