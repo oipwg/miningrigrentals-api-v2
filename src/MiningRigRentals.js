@@ -180,10 +180,10 @@ class MiningRigRentals {
 	};
 	/**
 	 * Generate a nonce needed to build the HMAC signature
-	 * @returns {number} - ((the current UNIX time * X) + prevNonce) where X is a number 1 - 100
+	 * @returns {number} - the current UNIX time + the previous Nonce
 	 */
 	generateNonce() {
-		this.prevNonce += (new Date()).getTime() * Math.floor(Math.random() * 100);
+		this.prevNonce += (new Date()).getTime();
 		return this.prevNonce
 	};
 
