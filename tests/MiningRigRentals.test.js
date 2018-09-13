@@ -27,7 +27,7 @@ describe('MiningRigRentals', () => {
 	});
 	/* ------------ Information API ----------- */
 	describe('Information API', () => {
-		it('should make a GET call to /whoami', async () => {
+		it('GET call to /whoami', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.whoami();
@@ -38,7 +38,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('should make a GET call to /info/servers', async () => {
+		it('GET call to /info/servers', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getServers();
@@ -48,7 +48,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('should make a GET call to /info/algos', async () => {
+		it('GET call to /info/algos', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getAlgos();
@@ -60,7 +60,7 @@ describe('MiningRigRentals', () => {
 		});
 		it('GET call to /info/algos with specified currency', async () => {
 			let mrr = new MiningRigRentals(apiKey)
-			let thrown = false, currency = 'EOS';
+			let thrown = false, currency = 'DASH';
 			try {
 				let res = await mrr.getAlgos(currency);
 				for (let x of res.data) {
@@ -71,7 +71,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		}, 10000);
-		it('should make a GET call to /info/algo/[NAME]', async () => {
+		it('GET call to /info/algo/[NAME]', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getAlgo("scrypt");
@@ -81,7 +81,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('make a GET call to /info/algo/[NAME] with specified currency', async () => {
+		it('GET call to /info/algo/[NAME] with specified currency', async () => {
 			let mrr = new MiningRigRentals(apiKey)
 			let thrown = false, currency = 'DASH';
 			try {
@@ -105,7 +105,7 @@ describe('MiningRigRentals', () => {
 	});
 	/* ------------ Rig API ----------- */
 	describe('Rig API', () => {
-		it('should make a get call to /rig', async () => {
+		it('GET call to /rig', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
@@ -115,11 +115,51 @@ describe('MiningRigRentals', () => {
 				thrown = true;
 				expect(thrown).toBeTruthy()
 			}
+		});
+		it('GET call to /rig with optional params', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let count = 5, type = 'scrypt', rpi = {min: 70, max: 80};
+			let hash = {min: 50000}, price ={};
+			let options = {
+				type,
+				// count,
+				// rpi,
+				// hash
+			};
+			try {
+				let res = await mrr.getRig(options);
+				log(res);
+				expect(res.success).toBeTruthy();
+				// expect(res.data.count).toEqual(count);
+				for (let r of res.data.records) {
+					log(r.price)
+					// expect(r.rpi >= rpi.min || r.rpi <= rpi.max).toBeTruthy();
+					expect(r.type).toEqual(type)
+				}
+			} catch (err) {
+				log(err)
+				thrown = true;
+				console.log("thrown")
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('GET call to /rig/mine', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			try {
+				let res = await mrr.getMyRigs();
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
 		})
 	});
 	/* ------------ Rental API ----------- */
 	describe('Rental API', () => {
-		it('should make a get call to /rental', async () => {
+		it('GET call to /rental', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
@@ -133,3 +173,5 @@ describe('MiningRigRentals', () => {
 		})
 	})
 });
+let log = (data) => {console.log(data)};
+
