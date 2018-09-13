@@ -1,5 +1,6 @@
 import axios from 'axios';
 import crypto from 'crypto';
+import querystring from 'querystring';
 
 /**
  An importable Javascript class to make REST requests to the MiningRigRentals API
@@ -85,7 +86,7 @@ class MiningRigRentals {
 	 * @param {string} [version='v2'] - specify the mining rig rental api version you want to hit; defaults v2
 	 * @returns {AxiosInstance}
 	 */
-	initAPI = (endpoint, version = v2) => {
+	initAPI(endpoint, version = v2) {
 		let nonce = this.generateNonce();
 		let hmac_digest = this.createHMACSignature(endpoint, nonce);
 		return (
@@ -106,7 +107,7 @@ class MiningRigRentals {
 	 * @param {number} nonce - a nonce that increments with each call
 	 * @returns {string} hmacSig - the HMAC signature in hex
 	 */
-	createHMACSignature = (endpoint, nonce) => {
+	createHMACSignature(endpoint, nonce) {
 		const concatString = `${this.key}${nonce}${endpoint}`;
 		return crypto.createHmac('sha1', this.secret).update(concatString).digest('hex');
 	};
@@ -114,7 +115,7 @@ class MiningRigRentals {
 	 * Generate a nonce needed to build the HMAC signature
 	 * @returns {number} - ((the current UNIX time * X) + prevNonce) where X is a number 1 - 100
 	 */
-	generateNonce = () => {
+	generateNonce() {
 		this.prevNonce += (new Date()).getTime() * Math.floor(Math.random() * 100);
 		return this.prevNonce
 	};
