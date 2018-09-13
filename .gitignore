@@ -63,3 +63,6 @@ typings/
 
 # JetBrains
 .idea
+
+# MiningRigRentals API Key and Secret
+apikey.js
