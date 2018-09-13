@@ -83,17 +83,18 @@ class MiningRigRentals {
 	/**
 	 * Initialize a new instance of axios with desired endpoint
 	 * @param {string} endpoint - the endpoint you wish to hit WITHOUT THE TRAILING SLASH; ex: /rig/14
+	 * @param {Object} [args] - the data to be passed along to the API
 	 * @param {string} [version='v2'] - specify the mining rig rental api version you want to hit; defaults v2
 	 * @returns {AxiosInstance}
 	 */
-	initAPI(endpoint, version = v2) {
+	initAPI(endpoint, args, version = v2) {
 		let nonce = this.generateNonce();
 		let hmac_digest = this.createHMACSignature(endpoint, nonce);
 		return (
 			new axios.create({
 				baseURL: `${this.baseURL}${version}/`,
 				headers: {
-					'x-api-key': 3,
+					'x-api-key': this.key,
 					'x-api-sign': hmac_digest,
 					'x-api-nonce': nonce,
 					'Access-Control-Allow-Origin': '*',
