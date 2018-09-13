@@ -4,6 +4,8 @@ import crypto from 'crypto';
 /**
  An importable Javascript class to make REST requests to the MiningRigRentals API
  */
+const v1 = 'v1';
+const v2 = 'v2';
 class MiningRigRentals {
 	/**
 	 * Create a new MiningRigRentals class from the constructor using your MRR api key and secret
@@ -20,31 +22,92 @@ class MiningRigRentals {
 			this.prevNonce = (new Date().getTime())
 		}
 	}
+	//Information API
+	/**
+	 * Test connectivity and return information about you
+	 * @returns {Promise<Object>}
+	 */
+	 async whoami() {
+		let endpoint = '/whoami';
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	};
+	/**
+	 * Get a list of MRR rig servers
+	 * @returns {Promise<Object>}
+	 */
+	async getServers() {
+		let endpoint = '/info/servers';
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	};
+
+	/**
+	 * Get all algos and statistics for them (suggested price, unit information, current rented hash/etc)
+	 * @param {string} [currency='BTC'] - Currency to use for price info
+	 * @returns {Promise<*>}
+	 */
+	async getAlgos(currency) {
+		let endpoint = '/info/algos';
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	};
+	/**
+	 *
+	 * @param {string} algo - the name of the algorithm you wish to search by. Ex: 'SCRYPT'
+	 * @param {string} [currency='BTC'] - Currency to use for price info
+	 * @returns {Promise<*>}
+	 */
+	async getAlgo(algo, currency) {
+		let endpoint = `/info/algos/${algo}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	};
 	/**
 	 * Initialize a new instance of axios with desired endpoint
 	 * @param {string} endpoint - the endpoint you wish to hit WITHOUT THE TRAILING SLASH; ex: /rig/14
 	 * @param {string} [version='v2'] - specify the mining rig rental api version you want to hit; defaults v2
 	 * @returns {AxiosInstance}
 	 */
-	initAPI = (endpoint, version = 'v2') => {
+	initAPI = (endpoint, version = v2) => {
+		let nonce = this.generateNonce();
+		let hmac_digest = this.createHMACSignature(endpoint, nonce);
 		return (
-			axios.create({
+			new axios.create({
 				baseURL: `${this.baseURL}${version}/`,
 				headers: {
-					'x-api-key': this.key,
-					'x-api-sign': this.createHMACSignature(endpoint),
-					'x-api-nonce': this.generateNonce()
-				}
+					'x-api-key': 3,
+					'x-api-sign': hmac_digest,
+					'x-api-nonce': nonce,
+					'Access-Control-Allow-Origin': '*',
+				},
 			})
 		)
 	};
 	/**
 	 * Create a SHA1 HMAC signature required for every mrr api call (see more at 'https://www.miningrigrentals.com/apidocv2')
 	 * @param {string} endpoint - the endpoint your wish to hit without the trailing slash
+	 * @param {number} nonce - a nonce that increments with each call
 	 * @returns {string} hmacSig - the HMAC signature in hex
 	 */
-	createHMACSignature = (endpoint) => {
-		const concatString = `${this.key}${this.generateNonce()}${endpoint}`;
+	createHMACSignature = (endpoint, nonce) => {
+		const concatString = `${this.key}${nonce}${endpoint}`;
 		return crypto.createHmac('sha1', this.secret).update(concatString).digest('hex');
 	};
 	/**
@@ -55,6 +118,31 @@ class MiningRigRentals {
 		this.prevNonce += (new Date()).getTime() * Math.floor(Math.random() * 100);
 		return this.prevNonce
 	};
+
+	/* ----------------- Utilities ----------------- */
+	/**
+	 * Utility function to provide users with in depth error messaging for debugging
+	 * @param url - the api endpoint
+	 * @param type - the type of request (GET, POST, PUT, etc)
+	 * @param error - the caught error
+	 * @returns {Error}
+	 */
+	createError = (url, type, error) => {
+		var extraErrorText = "";
+
+		if (error && error.response){
+			if (error.response.status)
+				extraErrorText += error.response.status + " "
+			if (error.response.statusText)
+				extraErrorText += error.response.statusText + " | "
+			if (error.response.data)
+				extraErrorText += JSON.stringify(error.response.data)
+		} else {
+			extraErrorText = error.toString()
+		}
+
+		return new Error("Unable to " + type + " " + url + ": " + extraErrorText)
+	}
 
 }
 
