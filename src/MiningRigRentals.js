@@ -93,16 +93,61 @@ class MiningRigRentals {
 	//@ToDO: add v1 account API methods
 
 	/* ------------ Rig API ----------- */
-	//@ToDo: finish getRig jsdoc (add the rest of the parameters)
 	/**
 	 *
 	 * @param  {object} options - input fields/query parameters
 	 * @param {string} options.type - Rig type, eg: sha256, scrypt, x11, etc
-	 * @param
-	 * @returns {Promise<*>}
+	 * @param {Object} [options.minhours] - Filter the minimum hours of the rig *broken
+	 * @param {number} [options.minhours.min]
+	 * @param {number} [options.minhours.max]
+	 * @param {Object} [options.maxhours] - Filter the maximum hours of the rig *broken
+	 * @param {number} [options.maxhours.min]
+	 * @param {number} [options.maxhours.max]
+	 * @param {Object} [options.rpi] - 	Filter the RPI score
+	 * @param {number} [options.rpi.min]
+	 * @param {number} [options.rpi.max]
+	 * @param {Object} [options.hash] - Filter the hashrate
+	 * @param {number} [options.hash.min]
+	 * @param {number} [options.hash.max]
+	 * @param {string} [options.hash.type] - The hash type of min/max. defaults to "mh", possible values: [hash,kh,mh,gh,th]
+	 * @param {Object} [options.price] - Filter the price
+	 * @param {number} [options.price.min]
+	 * @param {number} [options.price.max]
+	 * @param {boolean} [options.offline=false] - To show or not to show offline rigs
+	 * @param {boolean} [options.rented=false} - to show or not to show rented rigs
+	 * @param {Object} [options.region] - Filter the region
+	 * @param {string} [options.region.type] - Determines if this filter is an inclusive or exclusive filter.. possible options are [include,exclude]
+	 * @param {boolean} [options.region.<REGION>] - A region to include/exclude
+	 * @param {number} [options.count=100] - Number of results to return, max is 100
+	 * @param {number} [options.offset=0] - What result number to start with, returning COUNT results
+	 * @param {string} [options.order="score"] - Field to order the results by. Default is "score", Possible values: [rpi,hash,price,minhrs,maxhrs,score]
+	 * @param {string} [options.orderdir="asc"] - Order direction
+	 * @returns {Promise<Object>}
 	 */
 	async getRig(options) {
 		let endpoint = '/rig';
+		let params = {};
+		if (options) {
+			for (let opt in options) {
+				params[opt] = options[opt]
+			}
+		}
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * List my rigs
+	 * @param {Object} [options]
+	 * @param {string} [options.type] - Filter on algo -- see /info/algos
+	 * @param {boolean} [options.hashrate=false] - Calculate and display hashrates
+	 * @returns {Promise<Object>}
+	 */
+	async getMyRigs(options) {
+		let endpoint = '/rig/mine';
 		let params = {};
 		if (options) {
 			for (let opt in options) {
@@ -164,7 +209,7 @@ class MiningRigRentals {
 					'x-api-nonce': nonce,
 					'Access-Control-Allow-Origin': '*',
 				},
-				params: params
+				data: params
 			})
 		)
 	};
