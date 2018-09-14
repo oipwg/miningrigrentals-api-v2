@@ -1,5 +1,6 @@
 import axios from 'axios';
 import crypto from 'crypto';
+import qs from 'qs';
 
 /**
  An importable Javascript class to make REST requests to the MiningRigRentals API
@@ -91,10 +92,53 @@ class MiningRigRentals {
 	};
 	/* ------------ Account API ----------- */
 	//@ToDO: add v1 account API methods
+	/**
+	 * Get account balance
+	 * @returns {Promise<Object>}
+	 */
+	async getBalance() {
+		let endpoint = `/account`;
+		let params = {method: 'balance'};
+		let api = this.initAPI(endpoint, params, v1);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
 
+	/**
+	 * List favorited pools (account specific)
+	 * @returns {Promise<Object>}
+	 */
+	async getFavoritePools() {
+		let endpoint = `/account`;
+		let params = {method: 'pools'};
+		let api = this.initAPI(endpoint, params, v1);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+
+	/**
+	 * List profiles
+	 * @returns {Promise<Object>}
+	 */
+	async getProfiles() {
+		let endpoint = `/account`;
+		let params = {method: 'profiles'};
+		let api = this.initAPI(endpoint, params, v1);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
 	/* ------------ Rig API ----------- */
 	/**
-	 *
+	 * Search for rigs on a specified algo. This is identical to the main rig list pages.
 	 * @param  {object} options - input fields/query parameters
 	 * @param {string} options.type - Rig type, eg: sha256, scrypt, x11, etc
 	 * @param {Object} [options.minhours] - Filter the minimum hours of the rig *broken
@@ -146,7 +190,7 @@ class MiningRigRentals {
 	 * @param {boolean} [options.hashrate=false] - Calculate and display hashrates
 	 * @returns {Promise<Object>}
 	 */
-	async getMyRigs(options) {
+	async listMyRigs(options) {
 		let endpoint = '/rig/mine';
 		let params = {};
 		if (options) {
@@ -188,6 +232,55 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+	/**
+	 * Get information on rentals by rental ID.
+	 * @param {number|Array<number>} ids - Rental IDs
+	 * @returns {Promise<Object>}
+	 */
+	async getRentalById(ids) {
+		let idQueryString = '';
+		if (Array.isArray(ids)) {
+			idQueryString = ids.join(';');
+		} else {
+			if (typeof ids === 'string') {
+				idQueryString = ids
+			}
+		}
+		let endpoint = `/rental/${idQueryString}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * Create a new rental
+	 * @param {Object} options
+	 * @param {number} options.rig - Rig ID to rent
+	 * @param {number} options.length - Length in hours to rent
+	 * @param {number} options.profile - The profile ID to apply (see /account/profile)
+	 * @param {string} [options.currency='BTC'] - Currency to use -- one of [BTC,LTC,ETH,DASH]
+	 * @param {Object} [options.rate]
+	 * @param {string} [options.rate.type] - The hash type of rate. defaults to "mh", possible values: [hash,kh,mh,gh,th]
+	 * @param {number} [options.rate.price] - Price per [rate.type] per day to pay -- this is a filter only, it will use the rig's current price as long as it is <= this value
+	 * @returns {Promise<Object>}
+	 */
+	async createRental(options) {
+		let endpoint = `/rental`;
+		let params = {};
+		if (options) {
+			for (let opt in options) {
+				params[opt] = options[opt]
+			}
+		}
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
 
 	/* ------------ AXIOS INITIATION ----------- */
 	/**
@@ -199,7 +292,10 @@ class MiningRigRentals {
 	 */
 	initAPI(endpoint, params, version = v2) {
 		let nonce = this.generateNonce();
-		let hmac_digest = this.createHMACSignature(endpoint, nonce);
+		let hmac_digest = this.createHMACSignature(endpoint, nonce, version, params);
+		if (version === v1) {
+			params = {...params, nonce}
+		}
 		return (
 			new axios.create({
 				baseURL: `${this.baseURL}${version}/`,
@@ -209,7 +305,10 @@ class MiningRigRentals {
 					'x-api-nonce': nonce,
 					'Access-Control-Allow-Origin': '*',
 				},
-				data: params
+				params: params,
+				paramsSerializer: params => {
+					return qs.stringify(params, {arrayFormat: 'repeat'})
+				},
 			})
 		)
 	};
@@ -217,11 +316,19 @@ class MiningRigRentals {
 	 * Create a SHA1 HMAC signature required for every mrr api call (see more at 'https://www.miningrigrentals.com/apidocv2')
 	 * @param {string} endpoint - the endpoint your wish to hit without the trailing slash
 	 * @param {number} nonce - a nonce that increments with each call
+	 * @param {string} [version='v2'] - MRR API version number (which version of the api you want to hit)
+	 * @param {Object} [params] - An object of parameters. Only needed if hitting the v1 API (used for creating the signature)
 	 * @returns {string} hmacSig - the HMAC signature in hex
 	 */
-	createHMACSignature(endpoint, nonce) {
-		const concatString = `${this.key}${nonce}${endpoint}`;
-		return crypto.createHmac('sha1', this.secret).update(concatString).digest('hex');
+	createHMACSignature(endpoint, nonce, version, params) {
+		if (version === 'v2') {
+			const concatString = `${this.key}${nonce}${endpoint}`;
+			return crypto.createHmac('sha1', this.secret).update(concatString).digest('hex');
+		} else if (version === 'v1') {
+			let args = {...params, nonce};
+			let querystring = qs.stringify(args);
+			return crypto.createHmac('sha1', this.secret).update(querystring).digest('hex');
+		}
 	};
 	/**
 	 * Generate a nonce needed to build the HMAC signature

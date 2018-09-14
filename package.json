@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "compile": "npx babel src --out-dir lib",
-	"generate-docs": "node_modules/.bin/jsdoc --readme ./README.md -c jsdoc.json",
-	"prepare": "npm run generate-docs && npm run compile",
+    "generate-docs": "node_modules/.bin/jsdoc --readme ./README.md -c jsdoc.json",
+    "prepare": "npm run generate-docs && npm run compile",
     "test": "jest"
   },
   "author": "Ryan Chacon, Sky Ostler",
@@ -31,9 +31,10 @@
     "jsdoc-template": "git+https://github.com/oipwg/jsdoc-template.git"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "qs": "^6.5.2"
   },
   "jest": {
-	"testEnvironment": "node"
+    "testEnvironment": "node"
   }
 }
