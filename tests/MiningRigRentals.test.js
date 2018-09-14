@@ -254,12 +254,11 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		}, 10000);
-		it('PUT call to /rental/[ID1];[ID2]/profile/[profileID] | addAccountToPools', async () => {
+		it('PUT call to /rental/[ID1];[ID2]/profile/[profileID] | addPoolProfileToRentals', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
-
 			try {
-				let res = await mrr.addAccountToPools(1750630, profileID);
+				let res = await mrr.addPoolProfileToRentals(1750630, profileID);
 				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
