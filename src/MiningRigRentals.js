@@ -327,7 +327,6 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
-
 	/**
 	 * Add or replace a pool on one or more rentals
 	 * @param {number|Array<number>} rentalIDs - Rental IDs
@@ -339,7 +338,7 @@ class MiningRigRentals {
 	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
 	 * @returns {Promise<*>}
 	 */
-	async addOrUpdatePool(rentalIDs, options) {
+	async addOrUpdatePoolOnRentals(rentalIDs, options) {
 		let queryString = '';
 		if (Array.isArray(rentalIDs)) {
 			queryString = rentalIDs.join(';');
@@ -367,7 +366,7 @@ class MiningRigRentals {
 	 * @param {number|Array<number>} rentalIDs - Rental IDs
 	 * @param {number} priority - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
 	 */
-	async deletePoolOnRental(rentalIDs, priority) {
+	async deletePoolOnRentals(rentalIDs, priority) {
 		let queryString = '';
 		if (Array.isArray(rentalIDs)) {
 			queryString = rentalIDs.join(';');

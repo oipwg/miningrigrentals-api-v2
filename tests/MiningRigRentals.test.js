@@ -279,7 +279,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('PUT call to /rental/[ID1];[ID2]/pool | addOrUpdatePool', async () => {
+		it('PUT call to /rental/[ID1];[ID2]/pool | addOrUpdatePoolOnRentals', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			let rentalIDs = [1750630, 3242523];
@@ -291,7 +291,7 @@ describe('MiningRigRentals', () => {
 				priority: 0
 			};
 			try {
-				let res = await mrr.addOrUpdatePool(rentalIDs, options);
+				let res = await mrr.addOrUpdatePoolOnRentals(rentalIDs, options);
 				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
@@ -299,13 +299,13 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('DELETE call to /rental/[ID1],[ID2]/pool/[priority] | deletePoolOnRental', async () => {
+		it('DELETE call to /rental/[ID1],[ID2]/pool/[priority] | deletePoolOnRentals', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			let rentalIDs = [1750630];
 			let priority = 0;
 			try {
-				let res = await mrr.deletePoolOnRental(rentalIDs, priority);
+				let res = await mrr.deletePoolOnRentals(rentalIDs, priority);
 				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
