@@ -217,7 +217,7 @@ class MiningRigRentals {
 	 * @param {number} [options.limit=25] - Limit number (for pagination)
 	 * @returns {Promise<*>}
 	 */
-	async getRental(options) {
+	async getRentals(options) {
 		let endpoint = '/rental';
 		let params = {};
 		if (options) {
@@ -242,7 +242,7 @@ class MiningRigRentals {
 		if (Array.isArray(ids)) {
 			idQueryString = ids.join(';');
 		} else {
-			if (typeof ids === 'string') {
+			if (typeof ids === 'string' || typeof ids === 'number') {
 				idQueryString = ids
 			}
 		}
@@ -279,6 +279,109 @@ class MiningRigRentals {
 			return (await api.put(endpoint)).data;
 		} catch (err) {
 			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+
+	/**
+	 * Apply a pool profile to one or more rentals
+	 * @param {number|Array<number>} rentalIDs - rental IDs
+	 * @param {number} accountID - Profile ID to apply -- see /account/profile
+	 * @returns {Promise<*>}
+	 */
+	async addAccountToPools(rentalIDs, accountID) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let endpoint = `/rental/${queryString}/profile/${accountID}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * List pools assigned to one or more rentals.
+	 * @param {number|Array<number>} rentalIDs - Rental IDs
+	 * @returns {Promise<Object>}
+	 */
+	async getPoolsByRentalID(rentalIDs) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let endpoint = `/rental/${queryString}/pool`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+
+	/**
+	 * Add or replace a pool on one or more rentals
+	 * @param {number|Array<number>} rentalIDs - Rental IDs
+	 * @param {Object} options
+	 * @param {string} options.host - pool host (the part after stratum+tcp://)
+	 * @param {number} options.port - pool port (ex: 3333)
+	 * @param {string} options.user - workername
+	 * @param {string} options.pass - worker password
+	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @returns {Promise<*>}
+	 */
+	async addOrUpdatePool(rentalIDs, options) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let params = {};
+		if (options) {
+			for (let opt in options) {
+				params[opt] = options[opt]
+			}
+		}
+		let endpoint = `/rental/${queryString}/pool`;
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Delete a pool on one or more rentals
+	 * @param {number|Array<number>} rentalIDs - Rental IDs
+	 * @param {number} priority - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 */
+	async deletePoolOnRental(rentalIDs, priority) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let endpoint = `/rental/${queryString}/pool/${priority}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.delete(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'DELETE', err)
 		}
 	}
 

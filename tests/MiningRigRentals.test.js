@@ -1,6 +1,7 @@
 import MiningRigRentals from '../src/MiningRigRentals'
 import apiKey from './apikey';
 
+const profileID = 23136;
 describe('MiningRigRentals', () => {
 	/* ---------------- AXIOS ---------------- */
 	describe('Create an API axios instance', () => {
@@ -209,25 +210,25 @@ describe('MiningRigRentals', () => {
 	});
 	/* ------------ Rental API ----------- */
 	describe('Rental API', () => {
-		it('GET call to /rental', async () => {
+		it('GET call to /rental | getRentals', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
-				let res = await mrr.getRental();
-				console.log(res)
+				let res = await mrr.getRentals();
+				console.log(res.data.rentals)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /rental/[ID]', async () => {
+		it('GET call to /rental/[ID] | getRentalById', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let ids = [1553515, 1553516, 98881];
 			let thrown = false;
 			try {
 				let res = await mrr.getRentalById(ids);
-				console.log(res.data[2])
+				console.log(res.data)
 				expect(res.success).toBeTruthy()
 				expect(res.data[0].id === ids[0]).toBeTruthy()
 				expect(res.data[1].id === ids[1]).toBeTruthy()
@@ -236,13 +237,13 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('PUT call to /rental/', async () => {
+		it('PUT call to /rental/ | createRental', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			let options = {
 				rig: 98881,
 				length: 3.00,
-				profile: 16811,
+				profile: profileID,
 			};
 			try {
 				let res = await mrr.createRental(options);
@@ -252,8 +253,66 @@ describe('MiningRigRentals', () => {
 				thrown = true;
 				expect(thrown).toBeTruthy()
 			}
-		});
+		}, 10000);
+		it('PUT call to /rental/[ID1];[ID2]/profile/[profileID] | addAccountToPools', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
 
+			try {
+				let res = await mrr.addAccountToPools(1750630, profileID);
+				log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('GET call to /rental/[ID1];[ID2]/pool | getPoolsByRentalID', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			try {
+				let res = await mrr.getPoolsByRentalID(1750630);
+				log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('PUT call to /rental/[ID1];[ID2]/pool | addOrUpdatePool', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let rentalIDs = [1750630, 3242523];
+			let options = {
+				host: '',
+				port: 0,
+				user: '',
+				pass: '',
+				priority: 0
+			};
+			try {
+				let res = await mrr.addOrUpdatePool(rentalIDs, options);
+				log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('DELETE call to /rental/[ID1],[ID2]/pool/[priority] | deletePoolOnRental', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let rentalIDs = [1750630];
+			let priority = 0;
+			try {
+				let res = await mrr.deletePoolOnRental(rentalIDs, priority);
+				log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		})
 	})
 });
 let log = (data) => {console.log(data)};
