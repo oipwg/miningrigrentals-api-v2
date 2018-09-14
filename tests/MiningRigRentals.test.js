@@ -7,18 +7,18 @@ describe('MiningRigRentals', () => {
 	/* ---------------- AXIOS ---------------- */
 	describe('Create an API axios instance', () => {
 		const testEndpoint = '/rig/14';
-		it('should generate a nonce that increases with each call', () => {
+		it('should generate a nonce that increases with each call | generateNonce', () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let nonce = mrr.generateNonce();
 			let nonce2 = mrr.generateNonce();
 			expect(nonce2 > nonce).toBeTruthy();
 		});
-		it('should successfully build the HMAC signature', () => {
+		it('should successfully build the HMAC signature | createHMACSignature', () => {
 			let mrr = new MiningRigRentals(apiKey);
 			//ToDo: test x-api-sign
 			console.log(mrr.createHMACSignature(testEndpoint, mrr.generateNonce()));
 		});
-		it('should build an axios instance with all the required mrr fields', () => {
+		it('should build an axios instance with all the required mrr fields | initAPI', () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let api = mrr.initAPI(testEndpoint);
 			let headers = api.defaults.headers;
@@ -29,7 +29,7 @@ describe('MiningRigRentals', () => {
 	});
 	/* ------------ Information API ----------- */
 	describe('Information API', () => {
-		it('GET call to /whoami', async () => {
+		it('GET call to /whoami | whoami', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.whoami();
@@ -40,7 +40,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /info/servers', async () => {
+		it('GET call to /info/servers | getServers', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getServers();
@@ -51,7 +51,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /info/algos', async () => {
+		it('GET call to /info/algos | getAlgos', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getAlgos();
@@ -62,7 +62,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /info/algos with specified currency', async () => {
+		it('GET call to /info/algos with specified currency | getAlgos', async () => {
 			let mrr = new MiningRigRentals(apiKey)
 			let thrown = false, currency = 'DASH';
 			try {
@@ -75,7 +75,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		}, 10000);
-		it('GET call to /info/algo/[NAME]', async () => {
+		it('GET call to /info/algo/[NAME] | getAlgo', async () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getAlgo("scrypt");
@@ -85,7 +85,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /info/algo/[NAME] with specified currency', async () => {
+		it('GET call to /info/algo/[NAME] with specified currency | getAlgos', async () => {
 			let mrr = new MiningRigRentals(apiKey)
 			let thrown = false, currency = 'DASH';
 			try {
@@ -99,7 +99,7 @@ describe('MiningRigRentals', () => {
 	});
 	/* ------------ Account API ----------- */
 	describe('Account API', () => {
-		it('GET call to /account?method=balance', async () => {
+		it('GET call to /account?method=balance | getBalance', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
@@ -111,7 +111,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /account?method=pools', async () => {
+		it('GET call to /account?method=pools | getFavoritePools', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
@@ -123,7 +123,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /account?method=profiles', async () => {
+		it('GET call to /account?method=profiles | getProfiles', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
@@ -138,11 +138,11 @@ describe('MiningRigRentals', () => {
 	});
 	/* ------------ Rig API ----------- */
 	describe('Rig API', () => {
-		it('GET call to /rig', async () => {
+		it('GET call to /rig | getRigs', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
-				let res = await mrr.getRig({type: 'scrypt'});
+				let res = await mrr.getRigs({type: 'scrypt'});
 				log(res.data)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
@@ -150,7 +150,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /rig with optional params', async () => {
+		it('GET call to /rig with optional params | getRigs', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			let count = 5, type = 'scrypt', rpi = {min: 60, max: 70};
@@ -164,7 +164,7 @@ describe('MiningRigRentals', () => {
 				// maxhours,
 			};
 			try {
-				let res = await mrr.getRig(options);
+				let res = await mrr.getRigs(options);
 				// log(res);
 				expect(res.success).toBeTruthy();
 				// expect(res.data.count).toEqual(count);
@@ -180,7 +180,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /rig/mine', async () => {
+		it('GET call to /rig/mine | listMyRigs', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
@@ -192,7 +192,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('GET call to /rig/mine with params', async () => {
+		it('GET call to /rig/mine with params | listMyRigs', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			let params = {
@@ -220,7 +220,7 @@ describe('MiningRigRentals', () => {
 				expect(thrown).toBeTruthy()
 			}
 		});
-		it('PUT call to /rig | createRig', async () => {
+		it('PUT call to /rig | createRig | createRig', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			let options = {

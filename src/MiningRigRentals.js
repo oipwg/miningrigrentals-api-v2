@@ -168,7 +168,7 @@ class MiningRigRentals {
 	 * @param {string} [options.orderdir="asc"] - Order direction
 	 * @returns {Promise<Object>}
 	 */
-	async getRig(options) {
+	async getRigs(options) {
 		let endpoint = '/rig';
 		let params = {};
 		if (options) {
