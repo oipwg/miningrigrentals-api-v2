@@ -74,7 +74,7 @@ class MiningRigRentals {
 	 * Get statistics for an algo (suggested price, unit information, current rented hash/etc)
 	 * @param {string} algo - the name of the algorithm you wish to search by. Ex: 'scrypt'
 	 * @param {string} [currency='BTC'] - Currency to use for price info. Options: BTC, ETH, LTC, DASH
-	 * @returns {Promise<*>}
+	 * @returns {Promise<Object>}
 	 */
 	async getAlgo(algo, currency) {
 		let endpoint = `/info/algos/${algo}`, params;
@@ -465,7 +465,7 @@ class MiningRigRentals {
 	 * Delete a pool on one or more rigs
 	 * @param {number|Array<number>} rigIDs - Rig IDs
 	 * @param {number} priority - 	0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
-	 * @returns {Promise<*>}
+	 * @returns {Promise<Object>}
 	 */
 	async deletePoolOnRigs(rigIDs, priority) {
 		let queryString = '';
@@ -497,7 +497,7 @@ class MiningRigRentals {
 	 * @param {number} [options.rig] - Show rentals related to a specific rig ID
 	 * @param {number} [options.start=0] - Start number (for pagination)
 	 * @param {number} [options.limit=25] - Limit number (for pagination)
-	 * @returns {Promise<*>}
+	 * @returns {Promise<Object>}
 	 */
 	async getRentals(options) {
 		let endpoint = '/rental';
@@ -568,7 +568,7 @@ class MiningRigRentals {
 	 * Apply a pool profile to one or more rentals
 	 * @param {number|Array<number>} rentalIDs - rental IDs
 	 * @param {number} profileID - Profile ID to apply -- see /account/profile
-	 * @returns {Promise<*>}
+	 * @returns {Promise<Object>}
 	 */
 	async addPoolProfileToRentals(rentalIDs, profileID) {
 		let queryString = '';
@@ -579,7 +579,7 @@ class MiningRigRentals {
 				queryString = rentalIDs
 			}
 		}
-		let endpoint = `/rental/${queryString}/profile/${accountID}`;
+		let endpoint = `/rental/${queryString}/profile/${profileID}`;
 		let api = this.initAPI(endpoint);
 		try {
 			return (await api.put(endpoint)).data;
@@ -618,7 +618,7 @@ class MiningRigRentals {
 	 * @param {string} options.user - workername
 	 * @param {string} options.pass - worker password
 	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
-	 * @returns {Promise<*>}
+	 * @returns {Promise<Object>}
 	 */
 	async addOrUpdatePoolOnRentals(rentalIDs, options) {
 		let queryString = '';
