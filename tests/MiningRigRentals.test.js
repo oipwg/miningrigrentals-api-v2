@@ -2,6 +2,7 @@ import MiningRigRentals from '../src/MiningRigRentals'
 import apiKey from './apikey';
 
 const profileID = 23136;
+const rigIDs = [101619, 98881];
 describe('MiningRigRentals', () => {
 	/* ---------------- AXIOS ---------------- */
 	describe('Create an API axios instance', () => {
@@ -206,7 +207,144 @@ describe('MiningRigRentals', () => {
 				thrown = true;
 				expect(thrown).toBeTruthy()
 			}
-		})
+		});
+		it('GET call to /rig/[ID1];[ID2]... | getRigsByID', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			try {
+				let res = await mrr.getRigsByID(rigIDs);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('PUT call to /rig | createRig', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let options = {
+				name: `Ryan's super rig`,
+				server: 'alexandria.oip.io',
+				type: 'scrypt',
+				hash: {
+					hash: 5000,
+					type: 'mh'
+				}
+			};
+			try {
+				let res = await mrr.createRig(options);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('PUT call to /rig/[ID1];[ID2];... | updateRigsByID', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let options = {
+				name: `Ryan's super rig`,
+				server: 'alexandria.oip.io',
+				type: 'scrypt',
+				hash: {
+					hash: 5000,
+					type: 'mh'
+				}
+			};
+			try {
+				let res = await mrr.updateRigsByID(rigIDs, options);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('DELETE call to /rig/[ID1];[ID2];... | deleteRigs', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			try {
+				let res = await mrr.deleteRigs(rigIDs);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('PUT call to /rig/[ID1];[ID2];.../extend | extendRental', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let options = {
+				hours: 3,
+				minutes: 6
+			};
+			try {
+				let res = await mrr.extendRental(rigIDs, options);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('PUT call to /rig/[ID1];[ID2];.../profile | addPoolToRigs', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			try {
+				let res = await mrr.addPoolToRigs(rigIDs, profileID);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('GET call to /rig/[ID1];[ID2];.../pool | getPoolsFromRigIDs', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			try {
+				let res = await mrr.getPoolsFromRigIDs(rigIDs);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('PUT call to /rig/[ID1];[ID2];.../pool | addOrUpdatePoolOnRigs', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let options = {
+				host: '',
+				port: 0,
+				user: '',
+				pass: '',
+			};
+			try {
+				let res = await mrr.addOrUpdatePoolOnRigs(rigIDs, options);
+				console.log(res)
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
+		it('DELETE call to /rig/[ID1];[ID2];.../pool | deletePoolOnRigs', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let thrown = false;
+			let priority = 0;
+			try {
+				let res = await mrr.deletePoolOnRigs(rigIDs, priority);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				thrown = true;
+				expect(thrown).toBeTruthy()
+			}
+		});
 	});
 	/* ------------ Rental API ----------- */
 	describe('Rental API', () => {
