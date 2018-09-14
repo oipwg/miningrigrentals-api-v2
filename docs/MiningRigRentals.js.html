@@ -76,7 +76,7 @@
       MiningRigRentals API V2
     </h3>
 
-    <h3>Classes</h3><ul><li id="MiningRigRentals-nav"><a href="MiningRigRentals.html">MiningRigRentals</a><ul class='methods'><li data-type="method" id="MiningRigRentals-createHMACSignature-nav"><a href="MiningRigRentals.html#createHMACSignature">createHMACSignature</a></li><li data-type="method" id="MiningRigRentals-generateNonce-nav"><a href="MiningRigRentals.html#generateNonce">generateNonce</a></li><li data-type="method" id="MiningRigRentals-getAlgo-nav"><a href="MiningRigRentals.html#getAlgo">getAlgo</a></li><li data-type="method" id="MiningRigRentals-getAlgos-nav"><a href="MiningRigRentals.html#getAlgos">getAlgos</a></li><li data-type="method" id="MiningRigRentals-getMyRigs-nav"><a href="MiningRigRentals.html#getMyRigs">getMyRigs</a></li><li data-type="method" id="MiningRigRentals-getRental-nav"><a href="MiningRigRentals.html#getRental">getRental</a></li><li data-type="method" id="MiningRigRentals-getRig-nav"><a href="MiningRigRentals.html#getRig">getRig</a></li><li data-type="method" id="MiningRigRentals-getServers-nav"><a href="MiningRigRentals.html#getServers">getServers</a></li><li data-type="method" id="MiningRigRentals-initAPI-nav"><a href="MiningRigRentals.html#initAPI">initAPI</a></li><li data-type="method" id="MiningRigRentals-whoami-nav"><a href="MiningRigRentals.html#whoami">whoami</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#v1">v1</a></li></ul>
+    <h3>Classes</h3><ul><li id="MiningRigRentals-nav"><a href="MiningRigRentals.html">MiningRigRentals</a><ul class='methods'><li data-type="method" id="MiningRigRentals-addAccountToPools-nav"><a href="MiningRigRentals.html#addAccountToPools">addAccountToPools</a></li><li data-type="method" id="MiningRigRentals-addOrUpdatePool-nav"><a href="MiningRigRentals.html#addOrUpdatePool">addOrUpdatePool</a></li><li data-type="method" id="MiningRigRentals-createHMACSignature-nav"><a href="MiningRigRentals.html#createHMACSignature">createHMACSignature</a></li><li data-type="method" id="MiningRigRentals-createRental-nav"><a href="MiningRigRentals.html#createRental">createRental</a></li><li data-type="method" id="MiningRigRentals-deletePoolOnRental-nav"><a href="MiningRigRentals.html#deletePoolOnRental">deletePoolOnRental</a></li><li data-type="method" id="MiningRigRentals-generateNonce-nav"><a href="MiningRigRentals.html#generateNonce">generateNonce</a></li><li data-type="method" id="MiningRigRentals-getAlgo-nav"><a href="MiningRigRentals.html#getAlgo">getAlgo</a></li><li data-type="method" id="MiningRigRentals-getAlgos-nav"><a href="MiningRigRentals.html#getAlgos">getAlgos</a></li><li data-type="method" id="MiningRigRentals-getBalance-nav"><a href="MiningRigRentals.html#getBalance">getBalance</a></li><li data-type="method" id="MiningRigRentals-getFavoritePools-nav"><a href="MiningRigRentals.html#getFavoritePools">getFavoritePools</a></li><li data-type="method" id="MiningRigRentals-getPoolsByRentalID-nav"><a href="MiningRigRentals.html#getPoolsByRentalID">getPoolsByRentalID</a></li><li data-type="method" id="MiningRigRentals-getProfiles-nav"><a href="MiningRigRentals.html#getProfiles">getProfiles</a></li><li data-type="method" id="MiningRigRentals-getRentalById-nav"><a href="MiningRigRentals.html#getRentalById">getRentalById</a></li><li data-type="method" id="MiningRigRentals-getRentals-nav"><a href="MiningRigRentals.html#getRentals">getRentals</a></li><li data-type="method" id="MiningRigRentals-getRig-nav"><a href="MiningRigRentals.html#getRig">getRig</a></li><li data-type="method" id="MiningRigRentals-getServers-nav"><a href="MiningRigRentals.html#getServers">getServers</a></li><li data-type="method" id="MiningRigRentals-initAPI-nav"><a href="MiningRigRentals.html#initAPI">initAPI</a></li><li data-type="method" id="MiningRigRentals-listMyRigs-nav"><a href="MiningRigRentals.html#listMyRigs">listMyRigs</a></li><li data-type="method" id="MiningRigRentals-whoami-nav"><a href="MiningRigRentals.html#whoami">whoami</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#v1">v1</a></li></ul>
   </nav>
 
   <div id="main">
@@ -93,6 +93,7 @@
   <article>
     <pre class="prettyprint source linenums"><code>import axios from 'axios';
 import crypto from 'crypto';
+import qs from 'qs';
 
 /**
  An importable Javascript class to make REST requests to the MiningRigRentals API
@@ -163,7 +164,7 @@ class MiningRigRentals {
 		}
 	};
 	/**
-	 *
+	 * Get statistics for an algo (suggested price, unit information, current rented hash/etc)
 	 * @param {string} algo - the name of the algorithm you wish to search by. Ex: 'scrypt'
 	 * @param {string} [currency='BTC'] - Currency to use for price info. Options: BTC, ETH, LTC, DASH
 	 * @returns {Promise&lt;*>}
@@ -184,10 +185,53 @@ class MiningRigRentals {
 	};
 	/* ------------ Account API ----------- */
 	//@ToDO: add v1 account API methods
+	/**
+	 * Get account balance
+	 * @returns {Promise&lt;Object>}
+	 */
+	async getBalance() {
+		let endpoint = `/account`;
+		let params = {method: 'balance'};
+		let api = this.initAPI(endpoint, params, v1);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
 
+	/**
+	 * List favorited pools (account specific)
+	 * @returns {Promise&lt;Object>}
+	 */
+	async getFavoritePools() {
+		let endpoint = `/account`;
+		let params = {method: 'pools'};
+		let api = this.initAPI(endpoint, params, v1);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+
+	/**
+	 * List profiles
+	 * @returns {Promise&lt;Object>}
+	 */
+	async getProfiles() {
+		let endpoint = `/account`;
+		let params = {method: 'profiles'};
+		let api = this.initAPI(endpoint, params, v1);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
 	/* ------------ Rig API ----------- */
 	/**
-	 *
+	 * Search for rigs on a specified algo. This is identical to the main rig list pages.
 	 * @param  {object} options - input fields/query parameters
 	 * @param {string} options.type - Rig type, eg: sha256, scrypt, x11, etc
 	 * @param {Object} [options.minhours] - Filter the minimum hours of the rig *broken
@@ -239,7 +283,7 @@ class MiningRigRentals {
 	 * @param {boolean} [options.hashrate=false] - Calculate and display hashrates
 	 * @returns {Promise&lt;Object>}
 	 */
-	async getMyRigs(options) {
+	async listMyRigs(options) {
 		let endpoint = '/rig/mine';
 		let params = {};
 		if (options) {
@@ -266,7 +310,7 @@ class MiningRigRentals {
 	 * @param {number} [options.limit=25] - Limit number (for pagination)
 	 * @returns {Promise&lt;*>}
 	 */
-	async getRental(options) {
+	async getRentals(options) {
 		let endpoint = '/rental';
 		let params = {};
 		if (options) {
@@ -281,6 +325,158 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+	/**
+	 * Get information on rentals by rental ID.
+	 * @param {number|Array&lt;number>} ids - Rental IDs
+	 * @returns {Promise&lt;Object>}
+	 */
+	async getRentalById(ids) {
+		let idQueryString = '';
+		if (Array.isArray(ids)) {
+			idQueryString = ids.join(';');
+		} else {
+			if (typeof ids === 'string' || typeof ids === 'number') {
+				idQueryString = ids
+			}
+		}
+		let endpoint = `/rental/${idQueryString}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * Create a new rental
+	 * @param {Object} options
+	 * @param {number} options.rig - Rig ID to rent
+	 * @param {number} options.length - Length in hours to rent
+	 * @param {number} options.profile - The profile ID to apply (see /account/profile)
+	 * @param {string} [options.currency='BTC'] - Currency to use -- one of [BTC,LTC,ETH,DASH]
+	 * @param {Object} [options.rate]
+	 * @param {string} [options.rate.type] - The hash type of rate. defaults to "mh", possible values: [hash,kh,mh,gh,th]
+	 * @param {number} [options.rate.price] - Price per [rate.type] per day to pay -- this is a filter only, it will use the rig's current price as long as it is &lt;= this value
+	 * @returns {Promise&lt;Object>}
+	 */
+	async createRental(options) {
+		let endpoint = `/rental`;
+		let params = {};
+		if (options) {
+			for (let opt in options) {
+				params[opt] = options[opt]
+			}
+		}
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+
+	/**
+	 * Apply a pool profile to one or more rentals
+	 * @param {number|Array&lt;number>} rentalIDs - rental IDs
+	 * @param {number} accountID - Profile ID to apply -- see /account/profile
+	 * @returns {Promise&lt;*>}
+	 */
+	async addAccountToPools(rentalIDs, accountID) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let endpoint = `/rental/${queryString}/profile/${accountID}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * List pools assigned to one or more rentals.
+	 * @param {number|Array&lt;number>} rentalIDs - Rental IDs
+	 * @returns {Promise&lt;Object>}
+	 */
+	async getPoolsByRentalID(rentalIDs) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let endpoint = `/rental/${queryString}/pool`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+
+	/**
+	 * Add or replace a pool on one or more rentals
+	 * @param {number|Array&lt;number>} rentalIDs - Rental IDs
+	 * @param {Object} options
+	 * @param {string} options.host - pool host (the part after stratum+tcp://)
+	 * @param {number} options.port - pool port (ex: 3333)
+	 * @param {string} options.user - workername
+	 * @param {string} options.pass - worker password
+	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @returns {Promise&lt;*>}
+	 */
+	async addOrUpdatePool(rentalIDs, options) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let params = {};
+		if (options) {
+			for (let opt in options) {
+				params[opt] = options[opt]
+			}
+		}
+		let endpoint = `/rental/${queryString}/pool`;
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Delete a pool on one or more rentals
+	 * @param {number|Array&lt;number>} rentalIDs - Rental IDs
+	 * @param {number} priority - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 */
+	async deletePoolOnRental(rentalIDs, priority) {
+		let queryString = '';
+		if (Array.isArray(rentalIDs)) {
+			queryString = rentalIDs.join(';');
+		} else {
+			if (typeof rentalIDs === 'string' || typeof rentalIDs === 'number') {
+				queryString = rentalIDs
+			}
+		}
+		let endpoint = `/rental/${queryString}/pool/${priority}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.delete(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'DELETE', err)
+		}
+	}
 
 	/* ------------ AXIOS INITIATION ----------- */
 	/**
@@ -292,7 +488,10 @@ class MiningRigRentals {
 	 */
 	initAPI(endpoint, params, version = v2) {
 		let nonce = this.generateNonce();
-		let hmac_digest = this.createHMACSignature(endpoint, nonce);
+		let hmac_digest = this.createHMACSignature(endpoint, nonce, version, params);
+		if (version === v1) {
+			params = {...params, nonce}
+		}
 		return (
 			new axios.create({
 				baseURL: `${this.baseURL}${version}/`,
@@ -302,7 +501,10 @@ class MiningRigRentals {
 					'x-api-nonce': nonce,
 					'Access-Control-Allow-Origin': '*',
 				},
-				data: params
+				params: params,
+				paramsSerializer: params => {
+					return qs.stringify(params, {arrayFormat: 'repeat'})
+				},
 			})
 		)
 	};
@@ -310,11 +512,19 @@ class MiningRigRentals {
 	 * Create a SHA1 HMAC signature required for every mrr api call (see more at 'https://www.miningrigrentals.com/apidocv2')
 	 * @param {string} endpoint - the endpoint your wish to hit without the trailing slash
 	 * @param {number} nonce - a nonce that increments with each call
+	 * @param {string} [version='v2'] - MRR API version number (which version of the api you want to hit)
+	 * @param {Object} [params] - An object of parameters. Only needed if hitting the v1 API (used for creating the signature)
 	 * @returns {string} hmacSig - the HMAC signature in hex
 	 */
-	createHMACSignature(endpoint, nonce) {
-		const concatString = `${this.key}${nonce}${endpoint}`;
-		return crypto.createHmac('sha1', this.secret).update(concatString).digest('hex');
+	createHMACSignature(endpoint, nonce, version, params) {
+		if (version === 'v2') {
+			const concatString = `${this.key}${nonce}${endpoint}`;
+			return crypto.createHmac('sha1', this.secret).update(concatString).digest('hex');
+		} else if (version === 'v1') {
+			let args = {...params, nonce};
+			let querystring = qs.stringify(args);
+			return crypto.createHmac('sha1', this.secret).update(querystring).digest('hex');
+		}
 	};
 	/**
 	 * Generate a nonce needed to build the HMAC signature
