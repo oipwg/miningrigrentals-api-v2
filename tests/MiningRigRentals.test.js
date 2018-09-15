@@ -305,7 +305,7 @@ describe('MiningRigRentals', () => {
 				pass: '',
 			};
 			try {
-				let res = await mrr.addOrUpdatePoolOnRigs(rigIDs, options);)
+				let res = await mrr.addOrUpdatePoolOnRigs(rigIDs, options);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
