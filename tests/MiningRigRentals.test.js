@@ -1,5 +1,6 @@
 import MiningRigRentals from '../src/MiningRigRentals'
-import apiKey from './apikey';
+import apiKey from './apiTestKey'
+
 
 const profileID = 23136;
 const rigIDs = [101619, 98881];
@@ -16,7 +17,7 @@ describe('MiningRigRentals', () => {
 		it('should successfully build the HMAC signature | createHMACSignature', () => {
 			let mrr = new MiningRigRentals(apiKey);
 			//ToDo: test x-api-sign
-			console.log(mrr.createHMACSignature(testEndpoint, mrr.generateNonce()));
+			// console.log(mrr.createHMACSignature(testEndpoint, mrr.generateNonce()));
 		});
 		it('should build an axios instance with all the required mrr fields | initAPI', () => {
 			let mrr = new MiningRigRentals(apiKey);
@@ -33,7 +34,6 @@ describe('MiningRigRentals', () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.whoami();
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -44,7 +44,6 @@ describe('MiningRigRentals', () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getServers();
-				log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -55,7 +54,6 @@ describe('MiningRigRentals', () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.getAlgos();
-				log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -104,7 +102,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getBalance();
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -116,7 +113,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getFavoritePools();
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -128,7 +124,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getProfiles();
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -143,7 +138,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getRigs({type: 'scrypt'});
-				log(res.data)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -165,18 +159,14 @@ describe('MiningRigRentals', () => {
 			};
 			try {
 				let res = await mrr.getRigs(options);
-				// log(res);
 				expect(res.success).toBeTruthy();
 				// expect(res.data.count).toEqual(count);
 				for (let r of res.data.records) {
-					// log(r.maxhours)
 					expect(r.rpi >= rpi.min || r.rpi <= rpi.max).toBeTruthy();
 					// expect(r.type).toEqual(type)
 				}
 			} catch (err) {
-				log(err)
 				thrown = true;
-				console.log("thrown")
 				expect(thrown).toBeTruthy()
 			}
 		});
@@ -185,7 +175,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.listMyRigs();
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -201,7 +190,6 @@ describe('MiningRigRentals', () => {
 			};
 			try {
 				let res = await mrr.listMyRigs(params);
-				// console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -213,7 +201,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getRigsByID(rigIDs);
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -234,7 +221,6 @@ describe('MiningRigRentals', () => {
 			};
 			try {
 				let res = await mrr.createRig(options);
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -255,7 +241,6 @@ describe('MiningRigRentals', () => {
 			};
 			try {
 				let res = await mrr.updateRigsByID(rigIDs, options);
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -267,7 +252,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.deleteRigs(rigIDs);
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -283,7 +267,6 @@ describe('MiningRigRentals', () => {
 			};
 			try {
 				let res = await mrr.extendRental(rigIDs, options);
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -295,7 +278,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.addPoolToRigs(rigIDs, profileID);
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -307,7 +289,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getPoolsFromRigIDs(rigIDs);
-				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -324,8 +305,7 @@ describe('MiningRigRentals', () => {
 				pass: '',
 			};
 			try {
-				let res = await mrr.addOrUpdatePoolOnRigs(rigIDs, options);
-				console.log(res)
+				let res = await mrr.addOrUpdatePoolOnRigs(rigIDs, options);)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -338,7 +318,6 @@ describe('MiningRigRentals', () => {
 			let priority = 0;
 			try {
 				let res = await mrr.deletePoolOnRigs(rigIDs, priority);
-				console.log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -353,7 +332,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getRentals();
-				console.log(res.data.rentals)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -366,7 +344,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getRentalById(ids);
-				console.log(res.data)
 				expect(res.success).toBeTruthy()
 				expect(res.data[0].id === ids[0]).toBeTruthy()
 				expect(res.data[1].id === ids[1]).toBeTruthy()
@@ -385,7 +362,6 @@ describe('MiningRigRentals', () => {
 			};
 			try {
 				let res = await mrr.createRental(options);
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -397,7 +373,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.addPoolProfileToRentals(1750630, profileID);
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -409,7 +384,6 @@ describe('MiningRigRentals', () => {
 			let thrown = false;
 			try {
 				let res = await mrr.getPoolsByRentalID(1750630);
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -429,7 +403,6 @@ describe('MiningRigRentals', () => {
 			};
 			try {
 				let res = await mrr.addOrUpdatePoolOnRentals(rentalIDs, options);
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -443,7 +416,6 @@ describe('MiningRigRentals', () => {
 			let priority = 0;
 			try {
 				let res = await mrr.deletePoolOnRentals(rentalIDs, priority);
-				log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;

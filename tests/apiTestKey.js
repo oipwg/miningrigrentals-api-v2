@@ -1,0 +1,6 @@
+const apiKey = {
+	key: '44e058179654fae994af4b92e7c18d1443008943fa7296f07c5c4849140867ed',
+	secret: 'f2a2bf392f1350031255881d6cce979e83a2dc8434e2b14a1c50e6cfd310a157'
+};
+
+export default apiKey
