@@ -169,7 +169,7 @@ describe('MiningRigRentals', () => {
 				thrown = true;
 				expect(thrown).toBeTruthy()
 			}
-		});
+		}, 15000);
 		it('GET call to /rig/mine | listMyRigs', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
@@ -272,7 +272,7 @@ describe('MiningRigRentals', () => {
 				thrown = true;
 				expect(thrown).toBeTruthy()
 			}
-		});
+		}, 15000);
 		it('PUT call to /rig/[ID1];[ID2];.../profile | addPoolToRigs', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
