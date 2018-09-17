@@ -385,7 +385,7 @@ class MiningRigRentals {
 	 * @param {number} profileID - Profile ID to apply -- see /account/profile
 	 * @returns {Promise<Object>}
 	 */
-	async addPoolToRigs(rigIDs, profileID) {
+	async applyPoolToRigs(rigIDs, profileID) {
 		let queryString = '';
 		if (Array.isArray(rigIDs)) {
 			queryString = rigIDs.join(';');
@@ -570,7 +570,7 @@ class MiningRigRentals {
 	 * @param {number} profileID - Profile ID to apply -- see /account/profile
 	 * @returns {Promise<Object>}
 	 */
-	async addPoolProfileToRentals(rentalIDs, profileID) {
+	async applyPoolProfileToRentals(rentalIDs, profileID) {
 		let queryString = '';
 		if (Array.isArray(rentalIDs)) {
 			queryString = rentalIDs.join(';');
