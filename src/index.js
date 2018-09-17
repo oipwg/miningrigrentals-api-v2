@@ -1,5 +1,3 @@
 import MiningRigRentals from './MiningRigRentals';
 
-module.exports = {
-	MiningRigRentals
-}
+export default MiningRigRentals
