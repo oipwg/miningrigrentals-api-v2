@@ -1,13 +1,13 @@
 {
   "name": "miningrigrentals-api-v2",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Node JS Module interface with the Mining Rig Rentals API V2 easily",
   "main": "lib/index.js",
   "scripts": {
     "compile": "npx babel src --out-dir lib",
     "generate-docs": "node_modules/.bin/jsdoc --readme ./README.md -c jsdoc.json",
     "prepare": "npm run generate-docs && npm run compile",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "author": "Ryan Chacon, Sky Ostler",
   "keywords": [

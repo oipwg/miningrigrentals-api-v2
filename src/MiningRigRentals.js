@@ -20,7 +20,7 @@ class MiningRigRentals {
 		if (apiSettings && apiSettings.key && apiSettings.secret) {
 			this.key = apiSettings.key;
 			this.secret = apiSettings.secret;
-			this.prevNonce = (new Date().getTime())
+			this.prevNonce = Date.now()
 		}
 	}
 	/* ------------ Information API ----------- */
@@ -544,7 +544,7 @@ class MiningRigRentals {
 	 * @param {number} options.profile - The profile ID to apply (see /account/profile)
 	 * @param {string} [options.currency='BTC'] - Currency to use -- one of [BTC,LTC,ETH,DASH]
 	 * @param {Object} [options.rate]
-	 * @param {string} [options.rate.type] - The hash type of rate. defaults to "mh", possible values: [hash,kh,mh,gh,th]
+	 * @param {string} [options.rate.type='mh'] - The hash type of rate. defaults to "mh", possible values: [hash,kh,mh,gh,th]
 	 * @param {number} [options.rate.price] - Price per [rate.type] per day to pay -- this is a filter only, it will use the rig's current price as long as it is <= this value
 	 * @returns {Promise<Object>}
 	 */
@@ -719,7 +719,7 @@ class MiningRigRentals {
 	 * @returns {number} - the current UNIX time + the previous Nonce
 	 */
 	generateNonce() {
-		this.prevNonce += (new Date()).getTime();
+		this.prevNonce += 1
 		return this.prevNonce
 	};
 
