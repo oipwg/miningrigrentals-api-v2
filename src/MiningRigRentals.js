@@ -91,49 +91,303 @@ class MiningRigRentals {
 		}
 	};
 	/* ------------ Account API ----------- */
-	//@ToDO: add v1 account API methods
 	/**
-	 * Get account balance
+	 * Retrieve account information
 	 * @returns {Promise<Object>}
 	 */
-	async getBalance() {
+	async getAccount() {
 		let endpoint = `/account`;
-		let params = {method: 'balance'};
-		let api = this.initAPI(endpoint, params, v1);
+		let api = this.initAPI(endpoint);
 		try {
 			return (await api.get(endpoint)).data;
 		} catch (err) {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
-
 	/**
-	 * List favorited pools (account specific)
+	 * Retrieve account balances
 	 * @returns {Promise<Object>}
 	 */
-	async getFavoritePools() {
-		let endpoint = `/account`;
-		let params = {method: 'pools'};
-		let api = this.initAPI(endpoint, params, v1);
+	async getAccountBalance() {
+		let endpoint = `/account/balance`;
+		let api = this.initAPI(endpoint);
 		try {
 			return (await api.get(endpoint)).data;
 		} catch (err) {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
-
 	/**
-	 * List profiles
+	 * Request a payout/withdrawal **CURRENTLY DISABLED
+	 * ToDO: DISABLED ENDPOINT
 	 * @returns {Promise<Object>}
 	 */
-	async getProfiles() {
-		let endpoint = `/account`;
-		let params = {method: 'profiles'};
-		let api = this.initAPI(endpoint, params, v1);
+	async withdrawFunds() {
+		let endpoint = `/account/balance`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * List/search transaction history
+	 * @param {Object} [options]
+	 * @param {number} [options.start=0] - Start number (for pagination)
+	 * @param {number} [options.limit=100] - Limit number (for pagination)
+	 * @param {string} [options.algo] - Algo to filter -- see /info/algos
+	 * @param {string} [options.type] - Type to filter -- one of [credit,payout,referral,deposit,payment,credit/refund,debit/refund,rental fee]
+	 * @param {number} [options.rig] - Filter to specific rig by ID
+	 * @param {number} [options.rental] - Filter to specific rental by ID
+	 * @param {string} [options.txid] - Filter to specific txid
+	 * @returns {Promise<Object>}
+	 */
+	async getTransactions(options) {
+		let endpoint = `/account/transactions`;
+		let api = this.initAPI(endpoint);
 		try {
 			return (await api.get(endpoint)).data;
 		} catch (err) {
 			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * List all pool profiles, or list by algo
+	 * @param {string} [algo] - Algo to filter -- see /info/algos
+	 * @returns {Promise<Object>}
+	 */
+	async getPoolProfiles(algo) {
+		let endpoint = `/account/profile`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * Create a pool profile
+	 * @param {string} name - Name of the profile
+	 * @param {string} algo - Algo of the profile -> see /info/algos
+	 * @returns {Promise<Object>}
+	 */
+	async createPoolProfile(name, algo) {
+		let endpoint = `/account/profile`;
+		let params = {
+			name,
+			algo
+		};
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Get a specific pool profile
+	 * @param {number} id - ID of the pool profile
+	 * @returns {Promise<Object>}
+	 */
+	async getPoolProfile(id) {
+		let endpoint = `/account/profile/${id}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * Add or replace a pool to the profile
+	 * @param {Object} options
+	 * @param {number} options.profileID - profile id you want to add a pool to
+	 * @param {number} options.poolid - Pool ID to add -- see /account/pool
+	 * @param {number} options.priority - 0-4
+	 * @param {string} options.algo - Name of algorithm
+	 * @param {string} options.name - Pool name
+ 	 * @returns {Promise<Object>}
+	 */
+	async updatePoolProfile(options) {
+		let endpoint = `/account/profile/${options.profileID}`;
+		let params = {};
+		for (let opts in options) {
+			params[opts] = options[opts]
+		}
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Add or replace a pool to a profile... **NEEDS DOCUMENTATION
+	 * @param {Object} options
+	 * @param {number} options.profileID - Pool Profile ID
+	 * @param {number} options.poolid - Pool ID
+	 * @param {number} options.priority - 0-4
+	 * @returns {Promise<Object>}
+	 */
+	async updatePoolProfilePriority(options) {
+		let endpoint = `/account/profile/${options.profileID}/${options.priority}`;
+		let params = {
+			poolid: options.poolid
+		};
+		for (let opts in options) {
+			params[opts] = options[opts]
+		}
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Delete a specific pool profile
+	 * @param {number} id - Pool Profile ID
+	 * @returns {Promise<Object>}
+	 */
+	async deletePoolProfile(id) {
+		let endpoint = `/account/profile/${id}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.delete(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'DELETE', err)
+		}
+	}
+	/**
+	 * Test a pool to verify connectivity/functionality **Disabled Endpoint
+	 * ToDo: ** NO DOCUMENTATION || DISABLED ENDPOINT
+	 * @returns {Promise<Object>}
+	 */
+	async testPoolConnection() {
+		let endpoint = `/account/pool/test`;
+
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Get saved pools
+	 * @returns {Promise<Object>}
+	 */
+	async getPools() {
+		let endpoint = `/account/pool`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * Get pools by ID
+	 * @param {(number|Array.<number>)} ids  - pool ids
+	 * @returns {Promise<Object>}
+	 */
+	async getPoolsByID(ids) {
+		let queryString = '';
+		if (Array.isArray(ids)) {
+			queryString = ids.join(';');
+		} else {
+			if (typeof ids === 'string' || typeof ids === 'number') {
+				queryString = ids
+			}
+		}
+		let endpoint = `/account/pool/${queryString}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.get(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'GET', err)
+		}
+	}
+	/**
+	 * Create a pool
+	 * @param {Object} options
+	 * @param {string} options.type - Pool algo, eg: sha256, scrypt, x11, etc
+	 * @param {string} options.name - Name to identify the pool with
+	 * @param {string} options.host - Pool host, the part after stratum+tcp://
+	 * @param {number} options.port - Pool port, the part after the : in most pool host strings
+	 * @param {string} options.user - Your workname
+	 * @param {string} [options.pass] - Worker password
+	 * @param {string} [options.notes] - Additional notes to help identify the pool for you
+ 	 * @returns {Promise<Object>}
+	 */
+	async createPool(options) {
+		let endpoint = `/account/pool`;
+		let params = {};
+		for (let opt in options) {
+			params[opt] = options[opt]
+		}
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Update saved pools
+	 * @param {(number|Array.<number>)} poolIDs - IDs of the pools you wish to update
+	 * @param {Object} [options]
+	 * @param {string} [options.type] - Pool algo, eg: sha256, scrypt, x11, etc
+	 * @param {string} [options.name] - Name to identify the pool with
+	 * @param {string} [options.host] - Pool host, the part after stratum+tcp://
+	 * @param {number} [options.port] - Pool port, the part after the : in most pool host strings
+	 * @param {string} [options.user] - Your workname
+	 * @param {string} [options.pass] - Worker password
+	 * @param {string} [options.notes] - Additional notes to help identify the pool for you
+	 * @returns {Promise<Object>}
+	 */
+	async updatePools(poolIDs, options) {
+		let queryString = '';
+		if (Array.isArray(poolIDs)) {
+			queryString = poolIDs.join(';');
+		} else {
+			if (typeof poolIDs === 'string' || typeof poolIDs === 'number') {
+				queryString = poolIDs
+			}
+		}
+		let endpoint = `/account/pool/${queryString}`;
+		let params = {};
+		for (let opt in options) {
+			params[opt] = options[opt]
+		}
+		let api = this.initAPI(endpoint, params);
+		try {
+			return (await api.put(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'PUT', err)
+		}
+	}
+	/**
+	 * Delete 1 or more pools
+	 * @param {(number|Array.<number>)} poolIDs - Pool IDS to delete
+	 * @returns {Promise<Object>}
+	 */
+	async deletePools(poolIDs) {
+		let queryString = '';
+		if (Array.isArray(poolIDs)) {
+			queryString = poolIDs.join(';');
+		} else {
+			if (typeof poolIDs === 'string' || typeof poolIDs === 'number') {
+				queryString = poolIDs
+			}
+		}
+		let endpoint = `/account/pool/${queryString}`;
+		let api = this.initAPI(endpoint);
+		try {
+			return (await api.delete(endpoint)).data;
+		} catch (err) {
+			throw this.createError(endpoint, 'DELETE', err)
 		}
 	}
 	/* ------------ Rig API ----------- */

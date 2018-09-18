@@ -1,5 +1,5 @@
 import MiningRigRentals from '../src/MiningRigRentals'
-import apiKey from './apiTestKey'
+import apiKey from './apikey'
 
 
 const profileID = 23136;
@@ -34,6 +34,7 @@ describe('MiningRigRentals', () => {
 			let mrr = new MiningRigRentals(apiKey), thrown = false;
 			try {
 				let res = await mrr.whoami();
+				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -97,37 +98,215 @@ describe('MiningRigRentals', () => {
 	});
 	/* ------------ Account API ----------- */
 	describe('Account API', () => {
-		it('GET call to /account?method=balance | getBalance', async () => {
+		it('GET call /account | getAccount', async () => {
 			let mrr = new MiningRigRentals(apiKey);
-			let thrown = false;
 			try {
-				let res = await mrr.getBalance();
+				let res = await mrr.getAccount();
+				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
-				thrown = true;
-				expect(thrown).toBeTruthy()
+				expect(err).toBeUndefined()
 			}
 		});
-		it('GET call to /account?method=pools | getFavoritePools', async () => {
+		it('GET call /account/balance | getAccountBalance', async () => {
 			let mrr = new MiningRigRentals(apiKey);
-			let thrown = false;
 			try {
-				let res = await mrr.getFavoritePools();
+				let res = await mrr.getAccountBalance();
+				console.log(res)
 				expect(res.success).toBeTruthy()
 			} catch (err) {
-				thrown = true;
-				expect(thrown).toBeTruthy()
+				expect(err).toBeUndefined()
 			}
 		});
-		it('GET call to /account?method=profiles | getProfiles', async () => {
+		it('PUT call /account/balance | withdrawalFunds', async () => {
 			let mrr = new MiningRigRentals(apiKey);
-			let thrown = false;
 			try {
-				let res = await mrr.getProfiles();
+				let res = await mrr.withdrawFunds();
+				//@ToDO: this api is currently disabled so success will be false
+				expect(res.success).toBeFalsy()
+			} catch (err) {
+				expect(err).toBeUndefined()
+			}
+		});
+		it('GET call /account/transactions w/o options| getTransactions', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			try {
+				let res = await mrr.getTransactions();
+				console.log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
-				thrown = true;
-				expect(thrown).toBeTruthy()
+				expect(err).toBeUndefined()
+			}
+		});
+		it('GET call /account/profile w/o algo param| getPoolProfiles', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			try {
+				let res = await mrr.getPoolProfiles();
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				expect(err).toBeUndefined()
+			}
+		});
+		it('PUT call /account/profile| createPoolProfile', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let name = 'Ryan Test', algo = 'scrypt';
+			try {
+				let res = await mrr.createPoolProfile(name, algo);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				expect(err).toBeUndefined()
+			}
+		});
+		it('GET call /account/profile/[ID] | getPoolProfile', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let id = 23136;
+			try {
+				let res = await mrr.getPoolProfile(id);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				expect(err).toBeUndefined()
+			}
+		});
+		it('PUT call /account/profile/[ID] | updatePoolProfile', async () => {
+			//ToDo: TEST WHEN CREATED POOl
+			let mrr = new MiningRigRentals(apiKey);
+			let options = {
+				profileID: 73289,
+				poolid: NaN,
+				priority: 0,
+				algo: 'scrypt',
+				name: 'resttest'
+			};
+			try {
+				let res = await mrr.updatePoolProfile(options);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
+			}
+		});
+		it('PUT call /account/profile/[ID]/[0-4] | updatePoolProfilePriority', async () => {
+			//ToDo: TEST WHEN CREATED POOl
+			let mrr = new MiningRigRentals(apiKey);
+			let options = {
+				profileID: 73289,
+				poolid: NaN,
+				priority: 0,
+			};
+			try {
+				let res = await mrr.updatePoolProfilePriority(options);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
+			}
+		});
+		it('DELETE call /account/profile/[ID] | deletePoolProfile', async () => {
+			//ToDo: TEST WHEN CREATED POOL
+			let mrr = new MiningRigRentals(apiKey);
+			let id =  73289;
+			try {
+				let res = await mrr.deletePoolProfile(id);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
+			}
+		});
+		// it('PUT call /account/pool | testPoolConnection', async () => {
+		// 	//ToDo: DISABLED ENDPOINT
+		// 	let mrr = new MiningRigRentals(apiKey);
+		// 	try {
+		// 		let res = await mrr.testPoolConnection();
+		// 		console.log(res);
+		// 		expect(res.success).toBeTruthy()
+		// 	} catch (err) {
+		// 		console.log(err)
+		// 		expect(err).toBeUndefined()
+		// 	}
+		// });
+		it('GET call /account/pool | getPools', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			try {
+				let res = await mrr.getPools();
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
+			}
+		});
+		it('GET call /account/pool/[ID1];[ID2].. | getPoolsByID', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let ids = [
+				78854, 155427
+			];
+			try {
+				let res = await mrr.getPoolsByID(ids);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
+			}
+		});
+		it('PUT call /account/pool | createPool', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let options = {
+				type: 'scrypt',
+				name: `ryan's super dope super pool`,
+				host: 'snowflake.oip.fun',
+				port: 8080,
+				user: 'superman',
+				pass: 'pass',
+				notes: 'created via apiv2'
+			};
+			try {
+				let res = await mrr.createPool(options);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
+			}
+		});
+		it('PUT call /account/pool/[ID1];[ID2]... | updatePools', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let poolIDs = 176851;
+			let options = {
+				type: 'scrypt',
+				name: `ryan's super dope super pool`,
+				host: 'snowflake.oip.fun',
+				port: 8080,
+				user: 'LEX',
+				pass: 'pass',
+				notes: 'created via apiv2'
+			};
+			try {
+				let res = await mrr.updatePools(poolIDs, options);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
+			}
+		});
+		it('DELETE call /account/pool/[ID1];[ID2]... | deletePools', async () => {
+			let mrr = new MiningRigRentals(apiKey);
+			let poolIDs = 176851;
+			try {
+				let res = await mrr.deletePools(poolIDs);
+				console.log(res);
+				expect(res.success).toBeTruthy()
+			} catch (err) {
+				console.log(err)
+				expect(err).toBeUndefined()
 			}
 		});
 	});
