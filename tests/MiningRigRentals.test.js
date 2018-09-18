@@ -1,6 +1,13 @@
 import MiningRigRentals from '../src/MiningRigRentals'
-import apiKey from './apikey'
+import { config } from 'dotenv'
+config()
 
+const apiKey = {
+	key: process.env.APIKEY,
+	secret: process.env.APISECRET
+};
+
+console.log('apikey', apiKey)
 
 const profileID = 23136;
 const rigIDs = [101619, 98881];
