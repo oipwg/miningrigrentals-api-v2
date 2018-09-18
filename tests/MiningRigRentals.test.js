@@ -118,16 +118,16 @@ describe('MiningRigRentals', () => {
 				expect(err).toBeUndefined()
 			}
 		});
-		it('PUT call /account/balance | withdrawalFunds', async () => {
-			let mrr = new MiningRigRentals(apiKey);
-			try {
-				let res = await mrr.withdrawFunds();
-				//@ToDO: this api is currently disabled so success will be false
-				expect(res.success).toBeFalsy()
-			} catch (err) {
-				expect(err).toBeUndefined()
-			}
-		});
+		// it('PUT call /account/balance | withdrawalFunds', async () => {
+		// 	let mrr = new MiningRigRentals(apiKey);
+		// 	try {
+		// 		let res = await mrr.withdrawFunds();
+		// 		//@ToDO: this api is currently disabled so success will be false
+		// 		expect(res.success).toBeFalsy()
+		// 	} catch (err) {
+		// 		expect(err).toBeUndefined()
+		// 	}
+		// });
 		it('GET call /account/transactions w/o options| getTransactions', async () => {
 			let mrr = new MiningRigRentals(apiKey);
 			try {
@@ -150,7 +150,7 @@ describe('MiningRigRentals', () => {
 		});
 		it('PUT call /account/profile| createPoolProfile', async () => {
 			let mrr = new MiningRigRentals(apiKey);
-			let name = 'Ryan Test', algo = 'scrypt';
+			let name = 'SuperRyan', algo = 'scrypt';
 			try {
 				let res = await mrr.createPoolProfile(name, algo);
 				console.log(res);
@@ -170,18 +170,18 @@ describe('MiningRigRentals', () => {
 				expect(err).toBeUndefined()
 			}
 		});
-		it('PUT call /account/profile/[ID] | updatePoolProfile', async () => {
-			//ToDo: TEST WHEN CREATED POOl
+		it('PUT call /account/profile/[ID] | addPoolToProfile', async () => {
+			//ToDo: Name and priority don't seem to update
 			let mrr = new MiningRigRentals(apiKey);
 			let options = {
-				profileID: 73289,
-				poolid: NaN,
+				profileID: 73296,
+				poolid: 176318,
 				priority: 0,
 				algo: 'scrypt',
 				name: 'resttest'
 			};
 			try {
-				let res = await mrr.updatePoolProfile(options);
+				let res = await mrr.addPoolToProfile(options);
 				console.log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
@@ -189,16 +189,17 @@ describe('MiningRigRentals', () => {
 				expect(err).toBeUndefined()
 			}
 		});
-		it('PUT call /account/profile/[ID]/[0-4] | updatePoolProfilePriority', async () => {
-			//ToDo: TEST WHEN CREATED POOl
+		it('PUT call /account/profile/[ID]| updatePoolOnProfile', async () => {
+			//ToDo: Name and priority don't seem to update
 			let mrr = new MiningRigRentals(apiKey);
 			let options = {
-				profileID: 73289,
-				poolid: NaN,
-				priority: 0,
+				profileID: 73296,
+				poolid: 176851,
+				priority: 1,
+				name: 'ryan'
 			};
 			try {
-				let res = await mrr.updatePoolProfilePriority(options);
+				let res = await mrr.updatePoolOnProfile(options);
 				console.log(res);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
@@ -207,9 +208,8 @@ describe('MiningRigRentals', () => {
 			}
 		});
 		it('DELETE call /account/profile/[ID] | deletePoolProfile', async () => {
-			//ToDo: TEST WHEN CREATED POOL
 			let mrr = new MiningRigRentals(apiKey);
-			let id =  73289;
+			let id =  73293;
 			try {
 				let res = await mrr.deletePoolProfile(id);
 				console.log(res);

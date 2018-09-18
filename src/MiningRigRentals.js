@@ -117,20 +117,20 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
-	/**
-	 * Request a payout/withdrawal **CURRENTLY DISABLED
-	 * ToDO: DISABLED ENDPOINT
-	 * @returns {Promise<Object>}
-	 */
-	async withdrawFunds() {
-		let endpoint = `/account/balance`;
-		let api = this.initAPI(endpoint);
-		try {
-			return (await api.put(endpoint)).data;
-		} catch (err) {
-			throw this.createError(endpoint, 'PUT', err)
-		}
-	}
+	// /**
+	//  * Request a payout/withdrawal **CURRENTLY DISABLED
+	//  * ToDO: DISABLED ENDPOINT
+	//  * @returns {Promise<Object>}
+	//  */
+	// async withdrawFunds() {
+	// 	let endpoint = `/account/balance`;
+	// 	let api = this.initAPI(endpoint);
+	// 	try {
+	// 		return (await api.put(endpoint)).data;
+	// 	} catch (err) {
+	// 		throw this.createError(endpoint, 'PUT', err)
+	// 	}
+	// }
 	/**
 	 * List/search transaction history
 	 * @param {Object} [options]
@@ -200,16 +200,16 @@ class MiningRigRentals {
 		}
 	}
 	/**
-	 * Add or replace a pool to the profile
+	 * Add a pool to the profile
 	 * @param {Object} options
-	 * @param {number} options.profileID - profile id you want to add a pool to
+	 * @param {number} options.profileID - The profile id you want to add the pool to
 	 * @param {number} options.poolid - Pool ID to add -- see /account/pool
 	 * @param {number} options.priority - 0-4
 	 * @param {string} options.algo - Name of algorithm
-	 * @param {string} options.name - Pool name
+	 * @param {string} options.name - Pool name (doesn't change the pool name... just an MRR requirement)
  	 * @returns {Promise<Object>}
 	 */
-	async updatePoolProfile(options) {
+	async addPoolToProfile(options) {
 		let endpoint = `/account/profile/${options.profileID}`;
 		let params = {};
 		for (let opts in options) {
@@ -223,26 +223,20 @@ class MiningRigRentals {
 		}
 	}
 	/**
-	 * Add or replace a pool to a profile... **NEEDS DOCUMENTATION
+	 * Update or replace a pool to a profile... **Poor MRR Documentation
 	 * @param {Object} options
 	 * @param {number} options.profileID - Pool Profile ID
 	 * @param {number} options.poolid - Pool ID
 	 * @param {number} options.priority - 0-4
+	 * @param {string} options.algo - Name of algorithm
+	 * @param {string} options.name - Pool name (doesn't change the pool name... just an MRR requirement)
 	 * @returns {Promise<Object>}
 	 */
-	async updatePoolProfilePriority(options) {
-		let endpoint = `/account/profile/${options.profileID}/${options.priority}`;
-		let params = {
-			poolid: options.poolid
-		};
-		for (let opts in options) {
-			params[opts] = options[opts]
-		}
-		let api = this.initAPI(endpoint, params);
+	async updatePoolOnProfile(options) {
 		try {
-			return (await api.put(endpoint)).data;
+			return await this.addPoolToProfile(options)
 		} catch (err) {
-			throw this.createError(endpoint, 'PUT', err)
+			throw this.createError(`/account/profile/${options.profileID}`, 'PUT', err)
 		}
 	}
 	/**
@@ -259,21 +253,21 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'DELETE', err)
 		}
 	}
-	/**
-	 * Test a pool to verify connectivity/functionality **Disabled Endpoint
-	 * ToDo: ** NO DOCUMENTATION || DISABLED ENDPOINT
-	 * @returns {Promise<Object>}
-	 */
-	async testPoolConnection() {
-		let endpoint = `/account/pool/test`;
-
-		let api = this.initAPI(endpoint);
-		try {
-			return (await api.put(endpoint)).data;
-		} catch (err) {
-			throw this.createError(endpoint, 'PUT', err)
-		}
-	}
+	// /**
+	//  * Test a pool to verify connectivity/functionality **Disabled Endpoint
+	//  * ToDo: ** NO DOCUMENTATION || DISABLED ENDPOINT
+	//  * @returns {Promise<Object>}
+	//  */
+	// async testPoolConnection() {
+	// 	let endpoint = `/account/pool/test`;
+	//
+	// 	let api = this.initAPI(endpoint);
+	// 	try {
+	// 		return (await api.put(endpoint)).data;
+	// 	} catch (err) {
+	// 		throw this.createError(endpoint, 'PUT', err)
+	// 	}
+	// }
 	/**
 	 * Get saved pools
 	 * @returns {Promise<Object>}
