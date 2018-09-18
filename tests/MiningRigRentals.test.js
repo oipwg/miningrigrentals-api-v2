@@ -3,8 +3,8 @@ import { config } from 'dotenv'
 config()
 
 const apiKey = {
-	key: process.env.APIKEY,
-	secret: process.env.APISECRET
+	key: process.env.API_KEY,
+	secret: process.env.API_SECRET
 };
 
 console.log('apikey', apiKey)
