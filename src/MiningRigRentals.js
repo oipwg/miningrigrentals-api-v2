@@ -659,7 +659,7 @@ class MiningRigRentals {
 	 * @param {(number|Array<number>)} rigIDs - Rig IDs
 	 * @returns {Promise<Object>}
 	 */
-	async getPoolsFromRigIDs(rigIDs) {
+	async getPoolsFromRigs(rigIDs) {
 		let queryString = '';
 		if (Array.isArray(rigIDs)) {
 			queryString = rigIDs.join(';');
@@ -685,7 +685,7 @@ class MiningRigRentals {
 	 * @param {string} options.pass - worker password
 	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
 	 */
-	async addOrUpdatePoolOnRigs(rigIDs, options) {
+	async addPoolToRigs(rigIDs, options) {
 		let queryString = '';
 		if (Array.isArray(rigIDs)) {
 			queryString = rigIDs.join(';');
@@ -858,7 +858,7 @@ class MiningRigRentals {
 		}
 	}
 	/**
-	 * Add or replace a pool on one or more rentals
+	 * Add/replace/update a pool on one or more rentals
 	 * @param {(number|Array<number>)} rentalIDs - Rental IDs
 	 * @param {Object} options
 	 * @param {string} options.host - pool host (the part after stratum+tcp://)
@@ -868,7 +868,7 @@ class MiningRigRentals {
 	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
 	 * @returns {Promise<Object>}
 	 */
-	async addOrUpdatePoolOnRentals(rentalIDs, options) {
+	async addPoolToRentals(rentalIDs, options) {
 		let queryString = '';
 		if (Array.isArray(rentalIDs)) {
 			queryString = rentalIDs.join(';');

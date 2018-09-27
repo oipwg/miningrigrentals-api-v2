@@ -474,7 +474,7 @@ describe('MiningRigRentals', () => {
 			let mrr = new MiningRigRentals(apiKey);
 			let thrown = false;
 			try {
-				let res = await mrr.getPoolsFromRigIDs(rigIDs);
+				let res = await mrr.getPoolsFromRigs(rigIDs);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -491,7 +491,7 @@ describe('MiningRigRentals', () => {
 				pass: '',
 			};
 			try {
-				let res = await mrr.addOrUpdatePoolOnRigs(rigIDs, options);
+				let res = await mrr.addPoolToRigs(rigIDs, options);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
@@ -588,7 +588,7 @@ describe('MiningRigRentals', () => {
 				priority: 0
 			};
 			try {
-				let res = await mrr.addOrUpdatePoolOnRentals(rentalIDs, options);
+				let res = await mrr.addPoolToRentals(rentalIDs, options);
 				expect(res.success).toBeTruthy()
 			} catch (err) {
 				thrown = true;
