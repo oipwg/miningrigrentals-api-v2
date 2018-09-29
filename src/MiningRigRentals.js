@@ -24,8 +24,10 @@ class MiningRigRentals {
 		}
 	}
 	/* ------------ Information API ----------- */
+
 	/**
 	 * Test connectivity and return information about you
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	 async whoami() {
@@ -37,8 +39,10 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	};
+
 	/**
 	 * Get a list of MRR rig servers
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getServers() {
@@ -54,6 +58,7 @@ class MiningRigRentals {
 	/**
 	 * Get all algos and statistics for them (suggested price, unit information, current rented hash/etc)
 	 * @param {string} [currency='BTC'] - Currency to use for price info *Ticker. Options: BTC, ETH, LTC, DASH
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getAlgos(currency) {
@@ -70,10 +75,12 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	};
+
 	/**
 	 * Get statistics for an algo (suggested price, unit information, current rented hash/etc)
 	 * @param {string} algo - the name of the algorithm you wish to search by. Ex: 'scrypt'
 	 * @param {string} [currency='BTC'] - Currency to use for price info. Options: BTC, ETH, LTC, DASH
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getAlgo(algo, currency) {
@@ -90,9 +97,12 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	};
+
 	/* ------------ Account API ----------- */
+
 	/**
 	 * Retrieve account information
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getAccount() {
@@ -104,8 +114,10 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Retrieve account balances
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getAccountBalance() {
@@ -117,9 +129,11 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	// /**
 	//  * Request a payout/withdrawal **CURRENTLY DISABLED
 	//  * ToDO: DISABLED ENDPOINT
+	//  * @async
 	//  * @returns {Promise<Object>}
 	//  */
 	// async withdrawFunds() {
@@ -131,6 +145,7 @@ class MiningRigRentals {
 	// 		throw this.createError(endpoint, 'PUT', err)
 	// 	}
 	// }
+
 	/**
 	 * List/search transaction history
 	 * @param {Object} [options]
@@ -141,6 +156,7 @@ class MiningRigRentals {
 	 * @param {number} [options.rig] - Filter to specific rig by ID
 	 * @param {number} [options.rental] - Filter to specific rental by ID
 	 * @param {string} [options.txid] - Filter to specific txid
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getTransactions(options) {
@@ -152,9 +168,11 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * List all pool profiles, or list by algo
 	 * @param {string} [algo] - Algo to filter -- see /info/algos
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getPoolProfiles(algo) {
@@ -166,10 +184,12 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Create a pool profile
 	 * @param {string} name - Name of the profile
 	 * @param {string} algo - Algo of the profile -> see /info/algos
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async createPoolProfile(name, algo) {
@@ -188,6 +208,7 @@ class MiningRigRentals {
 	/**
 	 * Get a specific pool profile
 	 * @param {number} id - ID of the pool profile
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getPoolProfile(id) {
@@ -199,6 +220,7 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Add a pool to the profile
 	 * @param {Object} options
@@ -207,6 +229,7 @@ class MiningRigRentals {
 	 * @param {number} options.priority - 0-4
 	 * @param {string} options.algo - Name of algorithm
 	 * @param {string} options.name - Pool name (doesn't change the pool name... just an MRR requirement)
+	 * @async
  	 * @returns {Promise<Object>}
 	 */
 	async addPoolToProfile(options) {
@@ -230,6 +253,7 @@ class MiningRigRentals {
 	 * @param {number} options.priority - 0-4
 	 * @param {string} options.algo - Name of algorithm
 	 * @param {string} options.name - Pool name (doesn't change the pool name... just an MRR requirement)
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async updatePoolOnProfile(options) {
@@ -239,9 +263,11 @@ class MiningRigRentals {
 			throw this.createError(`/account/profile/${options.profileID}`, 'PUT', err)
 		}
 	}
+
 	/**
 	 * Delete a specific pool profile
 	 * @param {number} id - Pool Profile ID
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async deletePoolProfile(id) {
@@ -253,9 +279,11 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'DELETE', err)
 		}
 	}
+
 	// /**
 	//  * Test a pool to verify connectivity/functionality **Disabled Endpoint
 	//  * ToDo: ** NO DOCUMENTATION || DISABLED ENDPOINT
+	//  * @async
 	//  * @returns {Promise<Object>}
 	//  */
 	// async testPoolConnection() {
@@ -268,8 +296,10 @@ class MiningRigRentals {
 	// 		throw this.createError(endpoint, 'PUT', err)
 	// 	}
 	// }
+
 	/**
 	 * Get saved pools
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getPools() {
@@ -281,9 +311,11 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Get pools by ID
 	 * @param {(number|Array.<number>)} ids  - pool ids
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getPoolsByID(ids) {
@@ -303,6 +335,7 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Create a pool
 	 * @param {Object} options
@@ -313,6 +346,7 @@ class MiningRigRentals {
 	 * @param {string} options.user - Your workname
 	 * @param {string} [options.pass] - Worker password
 	 * @param {string} [options.notes] - Additional notes to help identify the pool for you
+	 * @async
  	 * @returns {Promise<Object>}
 	 */
 	async createPool(options) {
@@ -328,6 +362,7 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'PUT', err)
 		}
 	}
+
 	/**
 	 * Update saved pools
 	 * @param {(number|Array.<number>)} poolIDs - IDs of the pools you wish to update
@@ -339,6 +374,7 @@ class MiningRigRentals {
 	 * @param {string} [options.user] - Your workname
 	 * @param {string} [options.pass] - Worker password
 	 * @param {string} [options.notes] - Additional notes to help identify the pool for you
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async updatePools(poolIDs, options) {
@@ -362,9 +398,11 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'PUT', err)
 		}
 	}
+
 	/**
 	 * Delete 1 or more pools
 	 * @param {(number|Array.<number>)} poolIDs - Pool IDS to delete
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async deletePools(poolIDs) {
@@ -384,7 +422,9 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'DELETE', err)
 		}
 	}
+
 	/* ------------ Rig API ----------- */
+
 	/**
 	 * Search for rigs on a specified algo. This is identical to the main rig list pages.
 	 * @param  {object} options - input fields/query parameters
@@ -414,6 +454,7 @@ class MiningRigRentals {
 	 * @param {number} [options.offset=0] - What result number to start with, returning COUNT results
 	 * @param {string} [options.order="score"] - Field to order the results by. Default is "score", Possible values: [rpi,hash,price,minhrs,maxhrs,score]
 	 * @param {string} [options.orderdir="asc"] - Order direction
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getRigs(options) {
@@ -431,11 +472,13 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * List my rigs
 	 * @param {Object} [options]
 	 * @param {string} [options.type] - Filter on algo -- see /info/algos
 	 * @param {boolean} [options.hashrate=false] - Calculate and display hashrates
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async listMyRigs(options) {
@@ -453,9 +496,11 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Get 1 or more rigs by ID
 	 * @param {(number|Array<number>)} rigIDs - Rig IDs
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getRigsByID(rigIDs) {
@@ -475,6 +520,7 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Create a Rig
 	 * @param {Object} [options]
@@ -502,6 +548,7 @@ class MiningRigRentals {
 	 * @param {Object} [options.hash]
 	 * @param {(string|number)} options.hash.hash - Amount of hash to advertise
 	 * @param {string} options.hash.type='mh' - The hash type of hash.. defaults to "mh" possible values: [hash,kh,mh,gh,th]
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async createRig(options) {
@@ -519,6 +566,7 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'PUT', err)
 		}
 	}
+
 	/**
 	 * Update 1 or more rigs by ID
 	 * @param {(number|Array<number>)} rigIDs - Rig ID(s)
@@ -546,6 +594,7 @@ class MiningRigRentals {
 	 * @param {Object} [options.hash]
 	 * @param {(string|number)} [options.hash.hash] - Amounto f hash to advertise
 	 * @param {string} [options.hash.type='mh'] - The hash type of hash.. defaults to "mh" possible values: [hash,kh,mh,gh,th]
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async updateRigsByID(rigIDs, options) {
@@ -575,6 +624,7 @@ class MiningRigRentals {
 	/**
 	 * Delete 1 or more rigs by ID
 	 * @param {(number|Array<number>)} rigIDs
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async deleteRigs(rigIDs) {
@@ -601,6 +651,7 @@ class MiningRigRentals {
 	 * @param {Object} options
 	 * @param {number} options.hours - Hours to extend by
 	 * @param {number} options.minutes - Minutes to extend by
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async extendRental(rigIDs, options) {
@@ -631,6 +682,7 @@ class MiningRigRentals {
 	 * Apply a pool profile to one or more rigs
 	 * @param {(number|Array<number>)} rigIDs - Rig IDs
 	 * @param {number} profileID - Profile ID to apply -- see /account/profile
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async applyPoolToRigs(rigIDs, profileID) {
@@ -657,6 +709,7 @@ class MiningRigRentals {
 	/**
 	 * List pools assigned to one or more rigs
 	 * @param {(number|Array<number>)} rigIDs - Rig IDs
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getPoolsFromRigs(rigIDs) {
@@ -676,7 +729,8 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
-	/** Add or replace a pool on one or more rigs
+
+	/** Replace a pool on one or more rigs
 	 * @param {(number|Array<number>)} rigIDs - Rig IDs
 	 * @param {Object} options
 	 * @param {string} options.host - pool host (the part after stratum+tcp://)
@@ -684,6 +738,27 @@ class MiningRigRentals {
 	 * @param {string} options.user - workername
 	 * @param {string} options.pass - worker password
 	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @async
+	 * @returns {Promise<Object>}
+	 */
+	async replacePoolOnRigs(rigIDs, options) {
+		try {
+			return await this.addPoolToRigs(rigIDs, options)
+		} catch (err) {
+			throw new Error(err)
+		}
+	}
+
+	/** Add a pool on one or more rigs
+	 * @param {(number|Array<number>)} rigIDs - Rig IDs
+	 * @param {Object} options
+	 * @param {string} options.host - pool host (the part after stratum+tcp://)
+	 * @param {number} options.port - pool port (ex: 3333)
+	 * @param {string} options.user - workername
+	 * @param {string} options.pass - worker password
+	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @async
+	 * @returns {Promise<Object>}
 	 */
 	async addPoolToRigs(rigIDs, options) {
 		let queryString = '';
@@ -713,6 +788,7 @@ class MiningRigRentals {
 	 * Delete a pool on one or more rigs
 	 * @param {(number|Array<number>)} rigIDs - Rig IDs
 	 * @param {number} priority - 	0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async deletePoolOnRigs(rigIDs, priority) {
@@ -735,7 +811,9 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'DELETE', err)
 		}
 	}
+
 	/* ------------ Rental API ----------- */
+
 	/**
 	 * Lists rentals
 	 * @param {Object} [options] - input fields/query parameters
@@ -745,6 +823,7 @@ class MiningRigRentals {
 	 * @param {number} [options.rig] - Show rentals related to a specific rig ID
 	 * @param {number} [options.start=0] - Start number (for pagination)
 	 * @param {number} [options.limit=25] - Limit number (for pagination)
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getRentals(options) {
@@ -762,9 +841,11 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Get information on rentals by rental ID.
 	 * @param {(number|Array<number>)} ids - Rental IDs
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getRentalById(ids) {
@@ -784,6 +865,7 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
 	 * Create a new rental
 	 * @param {Object} options
@@ -794,6 +876,7 @@ class MiningRigRentals {
 	 * @param {Object} [options.rate]
 	 * @param {string} [options.rate.type='mh'] - The hash type of rate. defaults to "mh", possible values: [hash,kh,mh,gh,th]
 	 * @param {number} [options.rate.price] - Price per [rate.type] per day to pay -- this is a filter only, it will use the rig's current price as long as it is <= this value
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async createRental(options) {
@@ -816,6 +899,7 @@ class MiningRigRentals {
 	 * Apply a pool profile to one or more rentals
 	 * @param {(number|Array<number>)} rentalIDs - rental IDs
 	 * @param {number} profileID - Profile ID to apply -- see /account/profile
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async applyPoolProfileToRentals(rentalIDs, profileID) {
@@ -838,6 +922,7 @@ class MiningRigRentals {
 	/**
 	 * List pools assigned to one or more rentals.
 	 * @param {(number|Array<number>)} rentalIDs - Rental IDs
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async getPoolsByRentalID(rentalIDs) {
@@ -857,8 +942,9 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'GET', err)
 		}
 	}
+
 	/**
-	 * Add/replace/update a pool on one or more rentals
+	 * Update a pool on one or more rentals
 	 * @param {(number|Array<number>)} rentalIDs - Rental IDs
 	 * @param {Object} options
 	 * @param {string} options.host - pool host (the part after stratum+tcp://)
@@ -866,6 +952,26 @@ class MiningRigRentals {
 	 * @param {string} options.user - workername
 	 * @param {string} options.pass - worker password
 	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @async
+	 * @returns {Promise<Object>}
+	 */
+	async updatePoolOnRentals(rentalIDs, options) {
+		try {
+			return await this.addPoolToRentals(rentalIDs, options)
+		} catch (err) {
+			throw new Error(err)
+		}
+	}
+	/**
+	 * Add a pool on one or more rentals
+	 * @param {(number|Array<number>)} rentalIDs - Rental IDs
+	 * @param {Object} options
+	 * @param {string} options.host - pool host (the part after stratum+tcp://)
+	 * @param {number} options.port - pool port (ex: 3333)
+	 * @param {string} options.user - workername
+	 * @param {string} options.pass - worker password
+	 * @param {number} [options.priority] - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @async
 	 * @returns {Promise<Object>}
 	 */
 	async addPoolToRentals(rentalIDs, options) {
@@ -891,10 +997,13 @@ class MiningRigRentals {
 			throw this.createError(endpoint, 'PUT', err)
 		}
 	}
+
 	/**
 	 * Delete a pool on one or more rentals
 	 * @param {(number|Array<number>)} rentalIDs - Rental IDs
 	 * @param {number} priority - 0-4 -- can be passed in after pool/ instead.eg /rig/17/pool/0
+	 * @async
+	 * @return {Promise<Object>}
 	 */
 	async deletePoolOnRentals(rentalIDs, priority) {
 		let queryString = '';
@@ -915,6 +1024,7 @@ class MiningRigRentals {
 	}
 
 	/* ------------ AXIOS INITIATION ----------- */
+
 	/**
 	 * Initialize a new instance of axios with desired endpoint
 	 * @param {string} endpoint - the endpoint you wish to hit WITHOUT THE TRAILING SLASH; ex: /rig/14
@@ -944,6 +1054,7 @@ class MiningRigRentals {
 			})
 		)
 	};
+
 	/**
 	 * Create a SHA1 HMAC signature required for every mrr api call (see more at 'https://www.miningrigrentals.com/apidocv2')
 	 * @param {string} endpoint - the endpoint your wish to hit without the trailing slash
@@ -962,16 +1073,18 @@ class MiningRigRentals {
 			return crypto.createHmac('sha1', this.secret).update(querystring).digest('hex');
 		}
 	};
+
 	/**
 	 * Generate a nonce needed to build the HMAC signature
 	 * @returns {number} - the current UNIX time + the previous Nonce
 	 */
 	generateNonce() {
-		this.prevNonce += 1
+		this.prevNonce += 1;
 		return this.prevNonce
 	};
 
 	/* ----------------- Utilities ----------------- */
+
 	/**
 	 * Utility function to provide users with in depth error messaging for debugging
 	 * @param url - the api endpoint
@@ -992,10 +1105,8 @@ class MiningRigRentals {
 		} else {
 			extraErrorText = error.toString()
 		}
-
 		return new Error("Unable to " + type + " " + url + ": " + extraErrorText)
 	}
-
 }
 
 export default MiningRigRentals
