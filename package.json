@@ -28,13 +28,13 @@
     "babel-jest": "^23.6.0",
     "jest": "^23.6.0",
     "jsdoc": "^3.5.5",
-    "jsdoc-template": "git+https://github.com/oipwg/jsdoc-template.git"
+    "jsdoc-template": "git+https://github.com/oipwg/jsdoc-template.git",
+    "uid": "0.0.2"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "dotenv": "^6.0.0",
-    "qs": "^6.5.2",
-    "uid": "0.0.2"
+    "qs": "^6.5.2"
   },
   "jest": {
     "testEnvironment": "node"
