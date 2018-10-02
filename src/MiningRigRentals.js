@@ -344,7 +344,7 @@ class MiningRigRentals {
 	 * @param {string} options.host - Pool host, the part after stratum+tcp://
 	 * @param {number} options.port - Pool port, the part after the : in most pool host strings
 	 * @param {string} options.user - Your workname
-	 * @param {string} [options.pass] - Worker password
+	 * @param {string} [options.pass='x'] - Worker password
 	 * @param {string} [options.notes] - Additional notes to help identify the pool for you
 	 * @async
  	 * @returns {Promise<Object>}
@@ -354,6 +354,9 @@ class MiningRigRentals {
 		let params = {};
 		for (let opt in options) {
 			params[opt] = options[opt]
+		}
+		if (!params.pass) {
+			params.pass = 'x'
 		}
 		let api = this.initAPI(endpoint, params);
 		try {
