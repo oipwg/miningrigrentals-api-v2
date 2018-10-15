@@ -150,12 +150,15 @@ class MiningRigRentals {
 
 	/**
 	 * Get all algos and statistics for them (suggested price, unit information, current rented hash/etc)
+	 * @param {string} algo - algo to search on
 	 * @param {string} [currency='BTC'] - Currency to use for price info *Ticker. Options: BTC, ETH, LTC, DASH
 	 * @async
 	 * @returns {Promise&lt;Object>}
 	 */
-	async getAlgos(currency) {
-		let endpoint = `/info/algos`, params;
+	async getAlgos(algo, currency) {
+		algo = algo || ''
+		let endpoint = `/info/algos/${algo}`;
+		let params;
 		if (currency) {
 			params = {
 				currency: currency
@@ -324,6 +327,11 @@ class MiningRigRentals {
 	 * @param {string} options.name - Pool name (doesn't change the pool name... just an MRR requirement)
 	 * @async
  	 * @returns {Promise&lt;Object>}
+	 * //return example
+	 * {
+	 *   success: true,
+	 *   data: { id: '23136', success: true, message: 'Updated' }
+	 * }
 	 */
 	async addPoolToProfile(options) {
 		let endpoint = `/account/profile/${options.profileID}`;
@@ -437,7 +445,7 @@ class MiningRigRentals {
 	 * @param {string} options.host - Pool host, the part after stratum+tcp://
 	 * @param {number} options.port - Pool port, the part after the : in most pool host strings
 	 * @param {string} options.user - Your workname
-	 * @param {string} [options.pass] - Worker password
+	 * @param {string} [options.pass='x'] - Worker password
 	 * @param {string} [options.notes] - Additional notes to help identify the pool for you
 	 * @async
  	 * @returns {Promise&lt;Object>}
@@ -447,6 +455,9 @@ class MiningRigRentals {
 		let params = {};
 		for (let opt in options) {
 			params[opt] = options[opt]
+		}
+		if (!params.pass) {
+			params.pass = 'x'
 		}
 		let api = this.initAPI(endpoint, params);
 		try {

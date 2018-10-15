@@ -1,6 +1,6 @@
 {
   "name": "miningrigrentals-api-v2",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Node JS Module interface with the Mining Rig Rentals API V2 easily",
   "main": "lib/index.js",
   "scripts": {
