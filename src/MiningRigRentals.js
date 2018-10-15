@@ -57,12 +57,15 @@ class MiningRigRentals {
 
 	/**
 	 * Get all algos and statistics for them (suggested price, unit information, current rented hash/etc)
+	 * @param {string} algo - algo to search on
 	 * @param {string} [currency='BTC'] - Currency to use for price info *Ticker. Options: BTC, ETH, LTC, DASH
 	 * @async
 	 * @returns {Promise<Object>}
 	 */
-	async getAlgos(currency) {
-		let endpoint = `/info/algos`, params;
+	async getAlgos(algo, currency) {
+		algo = algo || ''
+		let endpoint = `/info/algos/${algo}`;
+		let params;
 		if (currency) {
 			params = {
 				currency: currency
