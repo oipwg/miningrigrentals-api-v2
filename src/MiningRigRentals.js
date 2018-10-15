@@ -234,6 +234,11 @@ class MiningRigRentals {
 	 * @param {string} options.name - Pool name (doesn't change the pool name... just an MRR requirement)
 	 * @async
  	 * @returns {Promise<Object>}
+	 * //return example
+	 * {
+	 *   success: true,
+	 *   data: { id: '23136', success: true, message: 'Updated' }
+	 * }
 	 */
 	async addPoolToProfile(options) {
 		let endpoint = `/account/profile/${options.profileID}`;
