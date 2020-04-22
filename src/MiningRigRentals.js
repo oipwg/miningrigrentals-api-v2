@@ -155,7 +155,7 @@ class MiningRigRentals {
 	 * @param {number} [options.start=0] - Start number (for pagination)
 	 * @param {number} [options.limit=100] - Limit number (for pagination)
 	 * @param {string} [options.algo] - Algo to filter -- see /info/algos
-	 * @param {string} [options.type] - Type to filter -- one of [credit,payout,referral,deposit,payment,credit/refund,debit/refund,rental fee]
+	 * @param {string} [options.type] - Type to filter -- one of [credit,payout,referral,deposit,payment,credit/refund,debit/refund,Rental Fee]
 	 * @param {number} [options.rig] - Filter to specific rig by ID
 	 * @param {number} [options.rental] - Filter to specific rental by ID
 	 * @param {string} [options.txid] - Filter to specific txid
@@ -164,7 +164,7 @@ class MiningRigRentals {
 	 */
 	async getTransactions(options) {
 		let endpoint = `/account/transactions`;
-		let api = this.initAPI(endpoint);
+		let api = this.initAPI(endpoint, options);
 		try {
 			return (await api.get(endpoint)).data;
 		} catch (err) {
