@@ -199,7 +199,7 @@ class MiningRigRentals {
 		let endpoint = `/account/profile`;
 		let params = {
 			name,
-			algo
+			algo: algo.toLowerCase()
 		};
 		let api = this.initAPI(endpoint, params);
 		try {
