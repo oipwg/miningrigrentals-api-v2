@@ -27,7 +27,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "jest": "^24.7.1",
-    "jsdoc": "^3.5.5",
+    "jsdoc": "^3.6.4",
     "jsdoc-template": "git+https://github.com/oipwg/jsdoc-template.git",
     "uid": "0.0.2"
   },
