@@ -1090,8 +1090,7 @@ class MiningRigRentals {
 	 * @returns {number} - the current UNIX time + the previous Nonce
 	 */
 	generateNonce() {
-		this.prevNonce += 1;
-		return this.prevNonce
+		return Date.now()
 	};
 
 	/* ----------------- Utilities ----------------- */
